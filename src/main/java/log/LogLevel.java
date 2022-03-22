@@ -8,13 +8,13 @@ public enum LogLevel {
     Error(4),
     Fatal(5);
 
-    private int level;
+    private final int level;
 
     private LogLevel(int level) {
         this.level = level;
     }
 
-    public int level() {
+    public int getLevel() {
         return level;
     }
 }
