@@ -12,8 +12,8 @@ import log.LogEntry;
 import log.LogWindowSource;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener {
-    private LogWindowSource logSource;
-    private TextArea logContent;
+    private final LogWindowSource logSource;
+    private final TextArea logContent;
 
     public LogWindow(LogWindowSource logSource) {
         super("Протокол работы", true, true, true, true);
