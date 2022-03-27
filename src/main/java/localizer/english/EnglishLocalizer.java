@@ -5,6 +5,7 @@ import localizer.GameWindowLocalizer;
 import localizer.Localizer;
 import localizer.CloseFrameLocalizer;
 
+
 public class EnglishLocalizer implements Localizer {
     @Override
     public ConfigLocalizer getConfigLocalizer() {
@@ -20,8 +21,7 @@ public class EnglishLocalizer implements Localizer {
     public CloseFrameLocalizer getCloseFrameLocalizer(){
         return new EnglishCloseFrameLocalizer();
     }
-
-    @Override
+  
     public String getTestMenuName() {
         return "Tests";
     }

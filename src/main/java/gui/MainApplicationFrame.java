@@ -6,8 +6,10 @@ import log.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
@@ -43,6 +45,7 @@ public class MainApplicationFrame extends JFrame {
 /*
     protected LogWindow createLogWindow(Localizer localizer) {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), localizer);
+
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
