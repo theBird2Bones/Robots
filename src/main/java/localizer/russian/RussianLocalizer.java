@@ -1,9 +1,6 @@
 package localizer.russian;
 
-import localizer.ConfigLocalizer;
-import localizer.GameWindowLocalizer;
-import localizer.Localizer;
-import localizer.ViewModeMenuLocalizer;
+import localizer.*;
 
 public class RussianLocalizer implements Localizer {
     @Override
@@ -14,6 +11,11 @@ public class RussianLocalizer implements Localizer {
     @Override
     public GameWindowLocalizer getGameWindowsLocalizer() {
         return new RussianGameWindowLocalizer();
+    }
+
+    @Override
+    public CloseFrameLocalizer getCloseFrameLocalizer(){
+        return new RussianCloseFrameLocalizer();
     }
 
     @Override
