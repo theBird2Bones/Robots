@@ -1,9 +1,9 @@
 package localizer.english;
 
-import localizer.ConfigLocalizer;
+import localizer.ConfigMenuLocalizer;
 import localizer.ViewModeMenuLocalizer;
 
-public class EnglishConfigMenuLocalizer implements ConfigLocalizer {
+public class EnglishConfigMenuLocalizer implements ConfigMenuLocalizer {
     @Override
     public String getConfigMenuName() {
         return "Settings";

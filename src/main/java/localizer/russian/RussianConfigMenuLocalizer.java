@@ -1,9 +1,9 @@
 package localizer.russian;
 
-import localizer.ConfigLocalizer;
+import localizer.ConfigMenuLocalizer;
 import localizer.ViewModeMenuLocalizer;
 
-public class RussianConfigMenuLocalizer implements ConfigLocalizer {
+public class RussianConfigMenuLocalizer implements ConfigMenuLocalizer {
     @Override
     public String getConfigMenuName() {
         return "Настройки";
