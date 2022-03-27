@@ -6,7 +6,10 @@ import java.awt.TextArea;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
+import localizer.Localizer;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
@@ -15,7 +18,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener {
     private final LogWindowSource logSource;
     private final TextArea logContent;
 
-    public LogWindow(LogWindowSource logSource) {
+    public LogWindow(LogWindowSource logSource, Localizer localizer) {
         super("Протокол работы", true, true, true, true);
         this.logSource = logSource;
         this.logSource.registerListener(this);
@@ -25,6 +28,15 @@ public class LogWindow extends JInternalFrame implements LogChangeListener {
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                CloseFrame.closeInternalFrame(LogWindow.this, localizer);
+            }
+        });
+
         pack();
         updateLogContent();
     }

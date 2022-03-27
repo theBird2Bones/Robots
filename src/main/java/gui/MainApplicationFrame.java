@@ -6,6 +6,8 @@ import log.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
@@ -25,14 +27,22 @@ public class MainApplicationFrame extends JFrame {
         GameWindow gameWindow = new GameWindow(localizer);
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
+//        addWindow(createLogWindow(localizer));
 
         setJMenuBar(generateMenuBar(localizer));
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                CloseFrame.closeApp(MainApplicationFrame.this, localizer);
+            }
+        });
     }
 
 /*
-    protected LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+    protected LogWindow createLogWindow(Localizer localizer) {
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), localizer);
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
@@ -53,7 +63,8 @@ public class MainApplicationFrame extends JFrame {
 
         var configMenu = new JMenu(localizer.getConfigLocalizer().getConfigMenuName());
         var exitButton = new JMenuItem(localizer.getConfigLocalizer().getExitButtonName());
-        exitButton.addActionListener(l -> System.exit(EXIT_ON_CLOSE));
+
+        exitButton.addActionListener(l -> CloseFrame.closeApp(this, localizer));
 
         configMenu.add(createLookAndFeelMenu(localizer));
         configMenu.add(exitButton);
