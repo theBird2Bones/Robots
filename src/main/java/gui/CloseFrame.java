@@ -21,11 +21,11 @@ public class CloseFrame {
     }
 
     private static int showDialogBox(Component frame, Localizer localizer){
-        Object[] option = {"Да", "Нет"};
+        Object[] option = localizer.getCloseFrameLocalizer().getOptionsName();
         return JOptionPane.showOptionDialog(
                 frame,
-                "Закрыть окно?",
-                "Подтверждение",
+                localizer.getCloseFrameLocalizer().getMessage(),
+                localizer.getCloseFrameLocalizer().getTitle(),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
