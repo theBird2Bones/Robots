@@ -4,8 +4,8 @@ import localizer.*;
 
 public class RussianLocalizer implements Localizer {
     @Override
-    public ConfigLocalizer getConfigLocalizer() {
-        return new RussianConfigMenuLocalizer();
+    public MenuBarLocalizer getMenuBarLocalizer() {
+        return new RussianMenuBarLocalizer();
     }
 
     @Override

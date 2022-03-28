@@ -1,7 +1,7 @@
 package localizer;
 
 public interface Localizer {
-    ConfigLocalizer getConfigLocalizer();
+    MenuBarLocalizer getMenuBarLocalizer();
 
     GameWindowLocalizer getGameWindowsLocalizer();
 

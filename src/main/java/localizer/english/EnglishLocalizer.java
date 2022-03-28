@@ -1,6 +1,6 @@
 package localizer.english;
 
-import localizer.ConfigLocalizer;
+import localizer.MenuBarLocalizer;
 import localizer.GameWindowLocalizer;
 import localizer.Localizer;
 import localizer.CloseFrameLocalizer;
@@ -8,8 +8,8 @@ import localizer.CloseFrameLocalizer;
 
 public class EnglishLocalizer implements Localizer {
     @Override
-    public ConfigLocalizer getConfigLocalizer() {
-        return new EnglishConfigMenuLocalizer();
+    public MenuBarLocalizer getMenuBarLocalizer() {
+        return new EnglishMenuBarLocalizer();
     }
 
     @Override

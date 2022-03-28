@@ -1,10 +1,9 @@
 package localizer;
 
-public interface ConfigLocalizer {
+public interface ConfigMenuLocalizer {
     String getConfigMenuName();
 
     ViewModeMenuLocalizer getViewModeMenuLocalizer();
 
     String getExitButtonName();
-
 }
