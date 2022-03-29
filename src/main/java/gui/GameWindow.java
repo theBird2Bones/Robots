@@ -1,8 +1,7 @@
 package gui;
 
-import localizer.Localizer;
-
 import java.awt.BorderLayout;
+import java.util.ResourceBundle;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -11,8 +10,8 @@ import javax.swing.event.InternalFrameEvent;
 
 public class GameWindow extends JInternalFrame {
 
-    public GameWindow(Localizer localizer) {
-        super(localizer.getGameWindowsLocalizer().getGameWindowName(),
+    public GameWindow(ResourceBundle bundle) {
+        super(bundle.getString("gameWindowName"),
                 true, true, true, true);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new GameVisualizer(), BorderLayout.CENTER);
@@ -22,7 +21,7 @@ public class GameWindow extends JInternalFrame {
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
-                CloseFrame.closeInternalFrame(GameWindow.this, localizer);
+                CloseFrame.closeInternalFrame(GameWindow.this, bundle);
             }
         });
 
