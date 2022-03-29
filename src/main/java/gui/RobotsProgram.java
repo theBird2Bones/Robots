@@ -18,7 +18,7 @@ public class RobotsProgram {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        var localizer = LocalizationManager.getLocalizerFromLocale(Locale.getDefault());
+        var localizer = LocalizationManager.getResourceBundle(Locale.getDefault());
 
         SwingUtilities.invokeLater(() -> {
             MainApplicationFrame frame = new MainApplicationFrame(localizer);

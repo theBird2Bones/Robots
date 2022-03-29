@@ -1,31 +1,33 @@
 package gui;
 
-import localizer.Localizer;
-
 import javax.swing.*;
 import java.awt.*;
+import java.util.ResourceBundle;
 
 public class CloseFrame {
-    public static void closeApp(Component frame, Localizer localizer){
-        if(showDialogBox(frame, localizer) == 0){
+    public static void closeApp(Component frame, ResourceBundle bundle){
+        if(showDialogBox(frame, bundle) == 0){
             frame.setVisible(false);
             System.exit(0);
         }
     }
 
-    public static void closeInternalFrame(JInternalFrame frame, Localizer localizer){
-        if(showDialogBox(frame, localizer) == 0){
+    public static void closeInternalFrame(JInternalFrame frame, ResourceBundle bundle){
+        if(showDialogBox(frame, bundle) == 0){
             frame.setVisible(false);
             frame.dispose();
         }
     }
 
-    private static int showDialogBox(Component frame, Localizer localizer){
-        Object[] option = localizer.getCloseFrameLocalizer().getOptionsName();
+    private static int showDialogBox(Component frame, ResourceBundle bundle){
+        Object[] option = new Object[] {
+                bundle.getString("closingFrameOptionYes"),
+                bundle.getString("closingFrameOptionNo")
+        };
         return JOptionPane.showOptionDialog(
                 frame,
-                localizer.getCloseFrameLocalizer().getMessage(),
-                localizer.getCloseFrameLocalizer().getTitle(),
+                bundle.getString("closingFrameMessage"),
+                bundle.getString("closingFrameTitle"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,

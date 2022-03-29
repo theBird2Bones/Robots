@@ -1,6 +1,5 @@
 package gui;
 
-import localizer.Localizer;
 import log.Logger;
 
 import javax.swing.*;
@@ -9,13 +8,14 @@ import java.awt.event.KeyEvent;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ResourceBundle;
 
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final LogWindow logWindow;
 
-    public MainApplicationFrame(Localizer localizer) {
+    public MainApplicationFrame(ResourceBundle bundle) {
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
 
@@ -27,18 +27,18 @@ public class MainApplicationFrame extends JFrame {
 
         setContentPane(desktopPane);
 
-        logWindow = createLogWindow(localizer);
+        logWindow = createLogWindow(bundle);
 
         addWindow(logWindow);
-        addWindow(createGameWindow(localizer));
+        addWindow(createGameWindow(bundle));
 
-        setJMenuBar(generateMenuBar(localizer));
+        setJMenuBar(generateMenuBar(bundle));
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                CloseFrame.closeApp(MainApplicationFrame.this, localizer);
+                CloseFrame.closeApp(MainApplicationFrame.this, bundle);
             }
         });
 
@@ -50,8 +50,8 @@ public class MainApplicationFrame extends JFrame {
         frame.setVisible(true);
     }
 
-    protected LogWindow createLogWindow(Localizer localizer) {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), localizer);
+    protected LogWindow createLogWindow(ResourceBundle bundle) {
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
 
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
@@ -62,8 +62,8 @@ public class MainApplicationFrame extends JFrame {
         return logWindow;
     }
 
-    protected GameWindow createGameWindow(Localizer localizer) {
-        GameWindow gameWindow = new GameWindow(localizer);
+    protected GameWindow createGameWindow(ResourceBundle bundle) {
+        GameWindow gameWindow = new GameWindow(bundle);
 
         gameWindow.setLocation(10, 10);
         gameWindow.setSize(400, 400);
@@ -72,51 +72,41 @@ public class MainApplicationFrame extends JFrame {
         return gameWindow;
     }
 
-    private JMenuBar generateMenuBar(Localizer localizer) {
+    private JMenuBar generateMenuBar(ResourceBundle bundle) {
         JMenuBar menuBar = new JMenuBar();
 
-        menuBar.add(createConfigMenu(localizer));
-        menuBar.add(createLogMenu(localizer));
+        menuBar.add(createConfigMenu(bundle));
+        menuBar.add(createLogMenu(bundle));
 
         return menuBar;
     }
 
-    private JMenu createConfigMenu(Localizer localizer) {
-        var configMenu = new JMenu(localizer.getMenuBarLocalizer().getConfigMenuLocalizer().getConfigMenuName());
+    private JMenu createConfigMenu(ResourceBundle bundle) {
+        var configMenu = new JMenu(bundle.getString("configMenuName"));
 
-        var exitButton = new JMenuItem(localizer.getMenuBarLocalizer().getConfigMenuLocalizer().getExitButtonName());
-        exitButton.addActionListener(l -> CloseFrame.closeApp(this, localizer));
+        var exitButton = new JMenuItem(bundle.getString("exitButtonName"));
+        exitButton.addActionListener(l -> CloseFrame.closeApp(this, bundle));
 
-        configMenu.add(createLookAndFeelMenu(localizer));
+        configMenu.add(createLookAndFeelMenu(bundle));
         configMenu.add(exitButton);
 
         return configMenu;
     }
 
-    private JMenu createLookAndFeelMenu(Localizer localizer) {
+    private JMenu createLookAndFeelMenu(ResourceBundle bundle) {
         JMenu lookAndFeelMenu =
-                new JMenu(localizer
-                        .getMenuBarLocalizer()
-                        .getConfigMenuLocalizer()
-                        .getViewModeMenuLocalizer()
-                        .getViewModeMenuName());
+                new JMenu(bundle.getString("viewModeMenuName"));
 
         lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
-        addSystemLookAndFeel(lookAndFeelMenu, localizer);
-        addCrossplatformLookAndFeel(lookAndFeelMenu, localizer);
+        addSystemLookAndFeel(lookAndFeelMenu, bundle);
+        addCrossplatformLookAndFeel(lookAndFeelMenu, bundle);
 
         return lookAndFeelMenu;
     }
 
-    private void addSystemLookAndFeel(JMenu lookAndFeelMenu, Localizer localizer) {
+    private void addSystemLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
         JMenuItem systemLookAndFeel =
-                new JMenuItem(
-                        localizer
-                                .getMenuBarLocalizer()
-                                .getConfigMenuLocalizer()
-                                .getViewModeMenuLocalizer()
-                                .getSystemSchemeName(),
-                        KeyEvent.VK_S);
+                new JMenuItem(bundle.getString("systemSchemeName"), KeyEvent.VK_S);
 
         systemLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -126,15 +116,9 @@ public class MainApplicationFrame extends JFrame {
         lookAndFeelMenu.add(systemLookAndFeel);
     }
 
-    private void addCrossplatformLookAndFeel(JMenu lookAndFeelMenu, Localizer localizer) {
+    private void addCrossplatformLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
         JMenuItem crossplatformLookAndFeel =
-                new JMenuItem(
-                        localizer
-                                .getMenuBarLocalizer()
-                                .getConfigMenuLocalizer()
-                                .getViewModeMenuLocalizer()
-                                .getUniversalSchemeName(),
-                        KeyEvent.VK_S);
+                new JMenuItem(bundle.getString("universalSchemeName"), KeyEvent.VK_S);
         crossplatformLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             this.invalidate();
@@ -143,23 +127,14 @@ public class MainApplicationFrame extends JFrame {
         lookAndFeelMenu.add(crossplatformLookAndFeel);
     }
 
-    private JMenu createLogMenu(Localizer localizer) {
-        JMenu testMenu = new JMenu(localizer.getTestMenuName());
+    private JMenu createLogMenu(ResourceBundle bundle) {
+        JMenu testMenu = new JMenu(bundle.getString("testMenuName"));
         testMenu.setMnemonic(KeyEvent.VK_T);
 
-        JMenuItem addLogMessageItem = new JMenuItem(
-                localizer
-                        .getMenuBarLocalizer()
-                        .getLogMenuLocalizer()
-                        .getTestLogButtonName(),
-                KeyEvent.VK_S);
+        JMenuItem addLogMessageItem = new JMenuItem(bundle.getString("testMenuName"), KeyEvent.VK_S);
         addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
 
-        JMenuItem switchLogMenuVisibleItem = new JMenuItem(
-                localizer
-                        .getMenuBarLocalizer()
-                        .getLogMenuLocalizer()
-                        .getSwitcherName());
+        JMenuItem switchLogMenuVisibleItem = new JMenuItem(bundle.getString("switcherName"));
         switchLogMenuVisibleItem.addActionListener((event) -> logWindow.setVisible(!logWindow.isVisible()));
 
         testMenu.add(switchLogMenuVisibleItem);
