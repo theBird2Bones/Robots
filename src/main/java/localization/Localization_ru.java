@@ -2,28 +2,30 @@ package localization;
 
 import java.util.ListResourceBundle;
 
+import static localizer.LocalizationKey.*;
+
 public class Localization_ru extends ListResourceBundle {
     @Override
     protected Object[][] getContents() {
         return new Object[][]{
-                {"configMenuName", "Настройки"},
-                {"exitButtonName", "Выход"},
+                {CONFIG_MENU_NAME.value(), "Настройки"},
+                {EXIT_BUTTON_NAME.value(), "Выход"},
 
-                {"viewModeMenuName", "Режим Отображения"},
-                {"universalSchemeName", "Универсальная схема"},
-                {"systemSchemeName", "Системная схема"},
+                {VIEW_MODE_MENU_NAME.value(), "Режим Отображения"},
+                {UNIVERSAL_SCHEME_NAME.value(), "Универсальная схема"},
+                {SYSTEM_SCHEME_NAME.value(), "Системная схема"},
 
-                {"switcherName", "Вкл / Выкл лог"},
-                {"testLogButtonName", "Сообщение в лог"},
+                {SWITCHER_NAME.value(), "Вкл / Выкл лог"},
+                {TEST_LOG_BUTTON_NAME.value(), "Сообщение в лог"},
 
-                {"gameWindowName", "Меню игры"},
+                {GAME_WINDOW_NAME.value(), "Меню игры"},
 
-                {"closingFrameTitle", "Подтверждение"},
-                {"closingFrameMessage", "Закрыть окно?"},
-                {"closingFrameOptionYes", "Да"},
-                {"closingFrameOptionNo", "Нет"},
+                {CLOSING_FRAME_TITLE.value(), "Подтверждение"},
+                {CLOSING_FRAME_MESSAGE.value(), "Закрыть окно?"},
+                {CLOSING_FRAME_OPTION_YES.value(), "Да"},
+                {CLOSING_FRAME_OPTION_NO.value(), "Нет"},
 
-                {"testMenuName", "Тесты"}
+                {TEST_MENU_NAME.value(), "Тесты"}
         };
     }
 }

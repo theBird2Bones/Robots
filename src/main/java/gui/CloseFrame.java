@@ -1,5 +1,7 @@
 package gui;
 
+import localizer.LocalizationKey;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
@@ -21,13 +23,13 @@ public class CloseFrame {
 
     private static int showDialogBox(Component frame, ResourceBundle bundle){
         Object[] option = new Object[] {
-                bundle.getString("closingFrameOptionYes"),
-                bundle.getString("closingFrameOptionNo")
+                bundle.getString(LocalizationKey.CLOSING_FRAME_OPTION_YES.value()),
+                bundle.getString(LocalizationKey.CLOSING_FRAME_OPTION_NO.value())
         };
         return JOptionPane.showOptionDialog(
                 frame,
-                bundle.getString("closingFrameMessage"),
-                bundle.getString("closingFrameTitle"),
+                bundle.getString(LocalizationKey.CLOSING_FRAME_MESSAGE.value()),
+                bundle.getString(LocalizationKey.CLOSING_FRAME_TITLE.value()),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,

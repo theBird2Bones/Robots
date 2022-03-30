@@ -1,5 +1,6 @@
 package gui;
 
+import localizer.LocalizationKey;
 import log.Logger;
 
 import javax.swing.*;
@@ -82,9 +83,9 @@ public class MainApplicationFrame extends JFrame {
     }
 
     private JMenu createConfigMenu(ResourceBundle bundle) {
-        var configMenu = new JMenu(bundle.getString("configMenuName"));
+        var configMenu = new JMenu(bundle.getString(LocalizationKey.CONFIG_MENU_NAME.value()));
 
-        var exitButton = new JMenuItem(bundle.getString("exitButtonName"));
+        var exitButton = new JMenuItem(bundle.getString(LocalizationKey.EXIT_BUTTON_NAME.value()));
         exitButton.addActionListener(l -> CloseFrame.closeApp(this, bundle));
 
         configMenu.add(createLookAndFeelMenu(bundle));
@@ -95,7 +96,7 @@ public class MainApplicationFrame extends JFrame {
 
     private JMenu createLookAndFeelMenu(ResourceBundle bundle) {
         JMenu lookAndFeelMenu =
-                new JMenu(bundle.getString("viewModeMenuName"));
+                new JMenu(bundle.getString(LocalizationKey.VIEW_MODE_MENU_NAME.value()));
 
         lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
         addSystemLookAndFeel(lookAndFeelMenu, bundle);
@@ -106,7 +107,7 @@ public class MainApplicationFrame extends JFrame {
 
     private void addSystemLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
         JMenuItem systemLookAndFeel =
-                new JMenuItem(bundle.getString("systemSchemeName"), KeyEvent.VK_S);
+                new JMenuItem(bundle.getString(LocalizationKey.SYSTEM_SCHEME_NAME.value()), KeyEvent.VK_S);
 
         systemLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -118,7 +119,7 @@ public class MainApplicationFrame extends JFrame {
 
     private void addCrossplatformLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
         JMenuItem crossplatformLookAndFeel =
-                new JMenuItem(bundle.getString("universalSchemeName"), KeyEvent.VK_S);
+                new JMenuItem(bundle.getString(LocalizationKey.UNIVERSAL_SCHEME_NAME.value()), KeyEvent.VK_S);
         crossplatformLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             this.invalidate();
@@ -128,13 +129,16 @@ public class MainApplicationFrame extends JFrame {
     }
 
     private JMenu createLogMenu(ResourceBundle bundle) {
-        JMenu testMenu = new JMenu(bundle.getString("testMenuName"));
+        JMenu testMenu = new JMenu(bundle.getString(LocalizationKey.TEST_MENU_NAME.value()));
         testMenu.setMnemonic(KeyEvent.VK_T);
 
-        JMenuItem addLogMessageItem = new JMenuItem(bundle.getString("testMenuName"), KeyEvent.VK_S);
+        JMenuItem addLogMessageItem = new JMenuItem(
+                bundle.getString(LocalizationKey.TEST_MENU_NAME.value()),
+                KeyEvent.VK_S
+        );
         addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
 
-        JMenuItem switchLogMenuVisibleItem = new JMenuItem(bundle.getString("switcherName"));
+        JMenuItem switchLogMenuVisibleItem = new JMenuItem(bundle.getString(LocalizationKey.SWITCHER_NAME.value()));
         switchLogMenuVisibleItem.addActionListener((event) -> logWindow.setVisible(!logWindow.isVisible()));
 
         testMenu.add(switchLogMenuVisibleItem);
