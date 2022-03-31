@@ -10,11 +10,11 @@ public enum LogLevel {
 
     private final int level;
 
-    private LogLevel(int level) {
+    LogLevel(int level) {
         this.level = level;
     }
 
-    public int getLevel() {
+    public int level() {
         return level;
     }
 }

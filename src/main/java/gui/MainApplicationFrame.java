@@ -1,19 +1,25 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import localizer.LocalizationKey;
+import log.Logger;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
-import log.Logger;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ResourceBundle;
+
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    private final LogWindow logWindow;
 
-    public MainApplicationFrame() {
+    public MainApplicationFrame(ResourceBundle bundle) {
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
+
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset,
@@ -22,18 +28,32 @@ public class MainApplicationFrame extends JFrame {
 
         setContentPane(desktopPane);
 
-        addWindow(createLogWindow());
+        logWindow = createLogWindow(bundle);
 
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.setSize(400, 400);
-        addWindow(gameWindow);
+        addWindow(logWindow);
+        addWindow(createGameWindow(bundle));
 
-        setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setJMenuBar(generateMenuBar(bundle));
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                CloseFrame.closeApp(MainApplicationFrame.this, bundle);
+            }
+        });
+
+        logWindow.setVisible(false);
     }
 
-    protected LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+    protected void addWindow(JInternalFrame frame) {
+        desktopPane.add(frame);
+        frame.setVisible(true);
+    }
+
+    protected LogWindow createLogWindow(ResourceBundle bundle) {
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
+
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
@@ -43,48 +63,52 @@ public class MainApplicationFrame extends JFrame {
         return logWindow;
     }
 
-    protected void addWindow(JInternalFrame frame) {
-        desktopPane.add(frame);
-        frame.setVisible(true);
+    protected GameWindow createGameWindow(ResourceBundle bundle) {
+        GameWindow gameWindow = new GameWindow(bundle);
+
+        gameWindow.setLocation(10, 10);
+        gameWindow.setSize(400, 400);
+        gameWindow.setMinimumSize(gameWindow.getSize());
+
+        return gameWindow;
     }
 
-    //TODO: сделать абстрактный класс, от которого сделать реализации классов, которые будут генерить нужную кнопку.
-    // паттерн фабричный метод
-    // унифицировать названия методов для создания
-    private JMenuBar generateMenuBar() {
+    private JMenuBar generateMenuBar(ResourceBundle bundle) {
         JMenuBar menuBar = new JMenuBar();
 
-        menuBar.add(createLookAndFeelMenu());
-        menuBar.add(createTestMenu());
+        menuBar.add(createConfigMenu(bundle));
+        menuBar.add(createLogMenu(bundle));
 
         return menuBar;
     }
 
-    private JMenu createLookAndFeelMenu() {
-        JMenu lookAndFeelMenu = new JMenu("Режим отображения");
+    private JMenu createConfigMenu(ResourceBundle bundle) {
+        var configMenu = new JMenu(bundle.getString(LocalizationKey.CONFIG_MENU_NAME.value()));
+
+        var exitButton = new JMenuItem(bundle.getString(LocalizationKey.EXIT_BUTTON_NAME.value()));
+        exitButton.addActionListener(l -> CloseFrame.closeApp(this, bundle));
+
+        configMenu.add(createLookAndFeelMenu(bundle));
+        configMenu.add(exitButton);
+
+        return configMenu;
+    }
+
+    private JMenu createLookAndFeelMenu(ResourceBundle bundle) {
+        JMenu lookAndFeelMenu =
+                new JMenu(bundle.getString(LocalizationKey.VIEW_MODE_MENU_NAME.value()));
+
         lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
-        lookAndFeelMenu
-                .getAccessibleContext()
-                .setAccessibleDescription("Управление режимом отображения приложения");
-        addSystemLookAndFeel(lookAndFeelMenu);
-        addCrossplatformLookAndFeel(lookAndFeelMenu);
+        addSystemLookAndFeel(lookAndFeelMenu, bundle);
+        addCrossplatformLookAndFeel(lookAndFeelMenu, bundle);
 
         return lookAndFeelMenu;
     }
 
-    private JMenu createTestMenu() {
-        JMenu testMenu = new JMenu("Тесты");
-        testMenu.setMnemonic(KeyEvent.VK_T);
-        testMenu
-                .getAccessibleContext()
-                .setAccessibleDescription("Тестовые команды");
-        addLogMessageItem(testMenu);
+    private void addSystemLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
+        JMenuItem systemLookAndFeel =
+                new JMenuItem(bundle.getString(LocalizationKey.SYSTEM_SCHEME_NAME.value()), KeyEvent.VK_S);
 
-        return testMenu;
-    }
-
-    private void addSystemLookAndFeel(JMenu lookAndFeelMenu) {
-        JMenuItem systemLookAndFeel = new JMenuItem("Системная схема", KeyEvent.VK_S);
         systemLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             this.invalidate();
@@ -93,8 +117,9 @@ public class MainApplicationFrame extends JFrame {
         lookAndFeelMenu.add(systemLookAndFeel);
     }
 
-    private void addCrossplatformLookAndFeel(JMenu lookAndFeelMenu) {
-        JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_S);
+    private void addCrossplatformLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
+        JMenuItem crossplatformLookAndFeel =
+                new JMenuItem(bundle.getString(LocalizationKey.UNIVERSAL_SCHEME_NAME.value()), KeyEvent.VK_S);
         crossplatformLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             this.invalidate();
@@ -103,11 +128,23 @@ public class MainApplicationFrame extends JFrame {
         lookAndFeelMenu.add(crossplatformLookAndFeel);
     }
 
-    private void addLogMessageItem(JMenu testMenu) {
-        JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
+    private JMenu createLogMenu(ResourceBundle bundle) {
+        JMenu testMenu = new JMenu(bundle.getString(LocalizationKey.TEST_MENU_NAME.value()));
+        testMenu.setMnemonic(KeyEvent.VK_T);
+
+        JMenuItem addLogMessageItem = new JMenuItem(
+                bundle.getString(LocalizationKey.TEST_MENU_NAME.value()),
+                KeyEvent.VK_S
+        );
         addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
 
+        JMenuItem switchLogMenuVisibleItem = new JMenuItem(bundle.getString(LocalizationKey.SWITCHER_NAME.value()));
+        switchLogMenuVisibleItem.addActionListener((event) -> logWindow.setVisible(!logWindow.isVisible()));
+
+        testMenu.add(switchLogMenuVisibleItem);
         testMenu.add(addLogMessageItem);
+
+        return testMenu;
     }
 
     private void setLookAndFeel(String className) {

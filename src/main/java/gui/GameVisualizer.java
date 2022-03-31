@@ -111,9 +111,17 @@ public class GameVisualizer extends JPanel {
         if (!Double.isFinite(newY)) {
             newY = robotPosition.y + velocity * duration * Math.sin(robotDirection);
         }
-        robotPosition.setLocation(newX, newY);
+
+        robotPosition.setLocation(keepInsideWindow(newX, newY));
         double newDirection = asNormalizedRadians(robotDirection + angularVelocity * duration);
         robotDirection = newDirection;
+    }
+
+    private Point2D.Double keepInsideWindow(double X, double Y){
+        return new Point2D.Double(
+                applyLimits(X, 0, getWidth()),
+                applyLimits(Y, 0, getHeight())
+        );
     }
 
     private static double asNormalizedRadians(double angle) {
