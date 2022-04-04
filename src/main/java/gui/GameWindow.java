@@ -16,7 +16,7 @@ public class GameWindow extends JInternalFrame {
         super(bundle.getString(LocalizationKey.GAME_WINDOW_NAME.value()),
                 true, true, true, true);
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new GameVisualizer(), BorderLayout.CENTER);
+        panel.add(new GamePanel(), BorderLayout.CENTER);
         getContentPane().add(panel);
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
