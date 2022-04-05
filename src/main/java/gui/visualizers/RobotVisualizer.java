@@ -1,6 +1,6 @@
 package gui.visualizers;
 
-import domainLogic.GameController;
+import domainLogic.RobotController;
 import utility.Point2DExtends;
 
 import java.awt.*;
@@ -8,19 +8,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 public class RobotVisualizer {
-    private final GameController gameController;
+    private final RobotController robotController;
 
-    public RobotVisualizer(GameController gameController){
-        this.gameController = gameController;
+    public RobotVisualizer(RobotController robotController){
+        this.robotController = robotController;
     }
 
     public void paint(Graphics2D g2d){
         drawRobot(
                 g2d,
-                gameController.getRobotPosition(),
-                gameController.getRobotDirection()
+                robotController.getRobotPosition(),
+                robotController.getRobotDirection()
         );
-        drawTarget(g2d, gameController.getTargetPosition());
+        drawTarget(g2d, robotController.getTargetPosition());
     }
 
     private void drawRobot(Graphics2D g, Point2D.Double robotPos, double direction) {

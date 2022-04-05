@@ -1,13 +1,9 @@
 package objects.tiles;
 
-import java.awt.geom.Point2D;
-
-public abstract class FloorTile {
-    public final Point2D point;
+public abstract class FloorTile implements Tile {
     private boolean passability;
 
-    public FloorTile(Point2D p, boolean isPassable){
-        point = p;
+    public FloorTile(boolean isPassable){
         passability = isPassable;
     }
 

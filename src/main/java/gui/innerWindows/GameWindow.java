@@ -19,7 +19,8 @@ public class GameWindow extends JInternalFrame {
                 true, true, true, true);
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new GamePanel(d), BorderLayout.CENTER);
+//        panel.add(new RobotPanel(d), BorderLayout.CENTER);
+        panel.add(new GamePanel(), BorderLayout.CENTER);
         getContentPane().add(panel);
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

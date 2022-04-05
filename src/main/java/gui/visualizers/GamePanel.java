@@ -1,29 +1,50 @@
 package gui.visualizers;
 
-import domainLogic.GameController;
-import gui.visualizers.RobotVisualizer;
+import lombok.Getter;
+import objects.tiles.DirtTile;
+import objects.tiles.FloorTile;
+import objects.tiles.StoneTile;
+import utility.MapCreator;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.awt.geom.Point2D;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JPanel;
-
 public class GamePanel extends JPanel {
+    private final ArenaPainter arenaPainter;
     private final Timer timer = initTimer();
-    private final GameController gameController;
-    private final RobotVisualizer robotVisualizer;
+
+    private MapCreator mapCreator;
+
+    @Getter
+    private FloorTile[][] map = {
+            {new StoneTile(), new StoneTile(), new StoneTile(), new DirtTile(), new StoneTile()},
+            {new StoneTile(), new StoneTile(), new DirtTile(), new DirtTile(), new StoneTile()},
+            {new DirtTile(), new DirtTile(), new DirtTile(), new StoneTile(), new StoneTile()},
+            {new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile()},
+            {new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile()}
+    };
+
+    @Getter
+    private Map<Point2D, Rectangle> pointToRectangle;
 
     private static Timer initTimer() {
         return new Timer("events generator", true);
     }
 
-    public GamePanel(Dimension d) {
-        gameController = new GameController(this);
-        robotVisualizer = new RobotVisualizer(gameController);
+    public GamePanel(){
+        mapCreator = new MapCreator(this);
+        pointToRectangle = mapCreator.generatePointToRectangle();
+
+        arenaPainter = new ArenaPainter(this);
+
 
         timer.schedule(new TimerTask() {
             @Override
@@ -31,31 +52,39 @@ public class GamePanel extends JPanel {
                 onRedrawEvent();
             }
         }, 0, 50);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                gameController.onModelUpdateEvent();
-            }
-        }, 0, 10);
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gameController.setTargetPosition(e.getPoint());
-                repaint();
+                requestFocusInWindow();
             }
         });
 
-        setDoubleBuffered(true);
-        setSize(d);
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyChar() == 'l'){
+                    map = mapCreator.generateMap();
+                    pointToRectangle = mapCreator.generatePointToRectangle();
+                    arenaPainter.updateBackground();
+                    onRedrawEvent();
+                }
+            }
+        });
+
     }
 
     protected void onRedrawEvent() {
         EventQueue.invokeLater(this::repaint);
     }
 
+    public Dimension getSize(){
+        return new Dimension(map.length, map[0].length);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        robotVisualizer.paint((Graphics2D) g);
+        arenaPainter.paint((Graphics2D) g);
     }
 }

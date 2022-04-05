@@ -1,21 +1,21 @@
 package domainLogic;
 
-import gui.visualizers.GamePanel;
+import gui.visualizers.RobotPanel;
 import objects.entities.Player;
 
 import java.awt.geom.Point2D;
 
-public class GameController {
+public class RobotController {
     private static final double MAX_VELOCITY = 0.1;
     private static final double MAX_ANGULAR_VELOCITY = 0.001;
-    private final GamePanel gamePanel;
+    private final RobotPanel robotPanel;
 
     private volatile Player robot;
     private volatile Point2D.Double targetPosition = new Point2D.Double(150, 100);
 
 
-    public GameController(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public RobotController(RobotPanel robotPanel) {
+        this.robotPanel = robotPanel;
         robot = new Player(new Point2D.Double(100, 100));
     }
 
@@ -82,8 +82,8 @@ public class GameController {
 
     private Point2D.Double keepInsideWindow(double X, double Y){
         return new Point2D.Double(
-                applyLimits(X, 0, gamePanel.getWidth()),
-                applyLimits(Y, 0, gamePanel.getHeight())
+                applyLimits(X, 0, robotPanel.getWidth()),
+                applyLimits(Y, 0, robotPanel.getHeight())
         );
     }
 
