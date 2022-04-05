@@ -1,6 +1,7 @@
 package domainLogic;
 
 import gui.GamePanel;
+import objects.entities.Player;
 
 import java.awt.geom.Point2D;
 
@@ -9,14 +10,13 @@ public class GameController {
     private static final double MAX_ANGULAR_VELOCITY = 0.001;
     private final GamePanel gamePanel;
 
-    private volatile Point2D.Double robotPosition = new Point2D.Double(100, 100);
-    private volatile double robotDirection = 0;
-
+    private volatile Player robot;
     private volatile Point2D.Double targetPosition = new Point2D.Double(150, 100);
 
 
     public GameController(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
+        robot = new Player(new Point2D.Double(100, 100));
     }
 
     public Point2D.Double getTargetPosition(){
@@ -28,31 +28,31 @@ public class GameController {
     }
 
     public Point2D.Double getRobotPosition(){
-        return robotPosition;
+        return robot.getPosition();
     }
 
     public double getRobotDirection(){
-        return robotDirection;
+        return robot.getDirection();
     }
 
     public void onModelUpdateEvent() {
         double distance = distance(
                 targetPosition.x, targetPosition.y,
-                robotPosition.x, robotPosition.y
+                robot.getPosition().x, robot.getPosition().y
         );
         if (distance < 0.5) {
             return;
         }
         double angleToTarget = angleTo(
-                robotPosition.x, robotPosition.y,
+                robot.getPosition().x, robot.getPosition().y,
                 targetPosition.x, targetPosition.y
         );
         double angularVelocity = 0;
 
-        if (angleToTarget > robotDirection) {
+        if (angleToTarget > robot.getDirection()) {
             angularVelocity = MAX_ANGULAR_VELOCITY;
         }
-        if (angleToTarget < robotDirection) {
+        if (angleToTarget < robot.getDirection()) {
             angularVelocity = -MAX_ANGULAR_VELOCITY;
         }
 
@@ -63,21 +63,21 @@ public class GameController {
         velocity = applyLimits(velocity, 0, MAX_VELOCITY);
         angularVelocity = applyLimits(angularVelocity, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 
-        double newX = robotPosition.x + velocity / angularVelocity *
-                (Math.sin(robotDirection + angularVelocity * duration) - Math.sin(robotDirection));
+        double newX = robot.getPosition().x + velocity / angularVelocity *
+                (Math.sin(robot.getDirection() + angularVelocity * duration) - Math.sin(robot.getDirection()));
         if (!Double.isFinite(newX)) {
-            newX = robotPosition.x + velocity * duration * Math.cos(robotDirection);
+            newX = robot.getPosition().x + velocity * duration * Math.cos(robot.getDirection());
         }
 
-        double newY = robotPosition.y - velocity / angularVelocity *
-                (Math.cos(robotDirection + angularVelocity * duration) - Math.cos(robotDirection));
+        double newY = robot.getPosition().y - velocity / angularVelocity *
+                (Math.cos(robot.getDirection() + angularVelocity * duration) - Math.cos(robot.getDirection()));
         if (!Double.isFinite(newY)) {
-            newY = robotPosition.y + velocity * duration * Math.sin(robotDirection);
+            newY = robot.getPosition().y + velocity * duration * Math.sin(robot.getDirection());
         }
 
-        robotPosition.setLocation(keepInsideWindow(newX, newY));
-        double newDirection = asNormalizedRadians(robotDirection + angularVelocity * duration);
-        robotDirection = newDirection;
+        robot.setLocation(keepInsideWindow(newX, newY));
+        double newDirection = asNormalizedRadians(robot.getDirection() + angularVelocity * duration);
+        robot.setDirection(newDirection);
     }
 
     private Point2D.Double keepInsideWindow(double X, double Y){
