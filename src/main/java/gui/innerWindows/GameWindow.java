@@ -1,5 +1,7 @@
-package gui;
+package gui.innerWindows;
 
+import gui.CloseFrame;
+import gui.visualizers.GamePanel;
 import localizer.LocalizationKey;
 
 import java.awt.*;

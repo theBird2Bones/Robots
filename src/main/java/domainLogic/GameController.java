@@ -1,6 +1,6 @@
 package domainLogic;
 
-import gui.GamePanel;
+import gui.visualizers.GamePanel;
 import objects.entities.Player;
 
 import java.awt.geom.Point2D;

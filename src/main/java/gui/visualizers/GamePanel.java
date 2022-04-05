@@ -1,4 +1,4 @@
-package gui;
+package gui.visualizers;
 
 import domainLogic.GameController;
 import gui.visualizers.RobotVisualizer;

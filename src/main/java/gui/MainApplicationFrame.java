@@ -1,5 +1,7 @@
 package gui;
 
+import gui.innerWindows.GameWindow;
+import gui.innerWindows.LogWindow;
 import localizer.LocalizationKey;
 import log.Logger;
 

@@ -1,4 +1,4 @@
-package gui;
+package gui.innerWindows;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import gui.CloseFrame;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
