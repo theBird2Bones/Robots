@@ -5,9 +5,9 @@ import gui.GamePanel;
 import java.awt.geom.Point2D;
 
 public class GameController {
-    private final GamePanel gamePanel;
     private static final double MAX_VELOCITY = 0.1;
     private static final double MAX_ANGULAR_VELOCITY = 0.001;
+    private final GamePanel gamePanel;
 
     private volatile Point2D.Double robotPosition = new Point2D.Double(100, 100);
     private volatile double robotDirection = 0;
@@ -80,15 +80,15 @@ public class GameController {
         robotDirection = newDirection;
     }
 
-    private static double applyLimits(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
-    }
-
     private Point2D.Double keepInsideWindow(double X, double Y){
         return new Point2D.Double(
                 applyLimits(X, 0, gamePanel.getWidth()),
                 applyLimits(Y, 0, gamePanel.getHeight())
         );
+    }
+
+    private static double applyLimits(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     private static double distance(double x1, double y1, double x2, double y2) {

@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
     private final Timer timer = initTimer();
-    private final GameController gC;
+    private final GameController gameController;
     private final RobotVisualizer robotVisualizer;
 
     private static Timer initTimer() {
@@ -24,8 +24,8 @@ public class GamePanel extends JPanel {
     }
 
     public GamePanel() {
-        gC = new GameController(this);
-        robotVisualizer = new RobotVisualizer(gC);
+        gameController = new GameController(this);
+        robotVisualizer = new RobotVisualizer(gameController);
 
         timer.schedule(new TimerTask() {
             @Override
@@ -36,13 +36,13 @@ public class GamePanel extends JPanel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                gC.onModelUpdateEvent();
+                gameController.onModelUpdateEvent();
             }
         }, 0, 10);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gC.setTargetPosition(e.getPoint());
+                gameController.setTargetPosition(e.getPoint());
                 repaint();
             }
         });
