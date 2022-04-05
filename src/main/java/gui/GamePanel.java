@@ -3,9 +3,7 @@ package gui;
 import domainLogic.GameController;
 import gui.visualizers.RobotVisualizer;
 
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -23,7 +21,7 @@ public class GamePanel extends JPanel {
         return new Timer("events generator", true);
     }
 
-    public GamePanel() {
+    public GamePanel(Dimension d) {
         gameController = new GameController(this);
         robotVisualizer = new RobotVisualizer(gameController);
 
@@ -46,7 +44,9 @@ public class GamePanel extends JPanel {
                 repaint();
             }
         });
+
         setDoubleBuffered(true);
+        setSize(d);
     }
 
     protected void onRedrawEvent() {
