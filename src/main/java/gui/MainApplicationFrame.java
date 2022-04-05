@@ -64,10 +64,9 @@ public class MainApplicationFrame extends JFrame {
     }
 
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle);
+        GameWindow gameWindow = new GameWindow(bundle, new Dimension(500, 500));
 
         gameWindow.setLocation(10, 10);
-        gameWindow.setSize(400, 400);
         gameWindow.setMinimumSize(gameWindow.getSize());
 
         return gameWindow;
