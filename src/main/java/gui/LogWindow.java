@@ -5,21 +5,24 @@ import java.awt.EventQueue;
 import java.awt.TextArea;
 import java.util.ResourceBundle;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener {
+public class LogWindow extends JInternalFrameWithCustomClose implements LogChangeListener {
     private final LogWindowSource logSource;
     private final TextArea logContent;
 
     public LogWindow(LogWindowSource logSource, ResourceBundle bundle) {
-        super("Протокол работы", true, true, true, true);
+        super(bundle, bundle.getString(LocalizationKey.LOG_WINDOW_NAME.value()),
+                true, true,
+                true, true);
+
         this.logSource = logSource;
         this.logSource.registerListener(this);
         logContent = new TextArea("");

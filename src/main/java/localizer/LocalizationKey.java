@@ -8,7 +8,7 @@ public enum LocalizationKey {
 
     SWITCHER_NAME("switcherName"), TEST_LOG_BUTTON_NAME("testLogButtonName"),
 
-    GAME_WINDOW_NAME("gameWindowName"),
+    GAME_WINDOW_NAME("gameWindowName"), LOG_WINDOW_NAME("logWindowName"),
 
     CLOSING_FRAME_TITLE("closingFrameTitle"), CLOSING_FRAME_MESSAGE("closingFrameMessage"),
     CLOSING_FRAME_OPTION_YES("closingFrameOptionYes"), CLOSING_FRAME_OPTION_NO("closingFrameOptionNo"),
