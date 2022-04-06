@@ -1,7 +1,7 @@
 package gui.visualizers;
 
 import domainLogic.RobotController;
-import utility.Point2DExtends;
+import utility.PointExtends;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -24,7 +24,7 @@ public class RobotVisualizer {
     }
 
     private void drawRobot(Graphics2D g, Point2D.Double robotPos, double direction) {
-        var roundRobotPos = Point2DExtends.round(robotPos);
+        var roundRobotPos = PointExtends.round(robotPos);
 
         AffineTransform t = AffineTransform.getRotateInstance(direction, roundRobotPos.x, roundRobotPos.y);
         g.setTransform(t);
@@ -45,9 +45,9 @@ public class RobotVisualizer {
         AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
         g.setTransform(t);
         g.setColor(Color.GREEN);
-        fillOval(g, Point2DExtends.round(targetPos), 5, 5);
+        fillOval(g, PointExtends.round(targetPos), 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, Point2DExtends.round(targetPos), 5, 5);
+        drawOval(g, PointExtends.round(targetPos), 5, 5);
     }
 
     private static void fillOval(Graphics g, Point center, int diam1, int diam2) {

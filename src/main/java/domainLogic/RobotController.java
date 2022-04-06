@@ -2,7 +2,9 @@ package domainLogic;
 
 import gui.visualizers.RobotPanel;
 import objects.entities.Player;
+import utility.PointExtends;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class RobotController {
@@ -16,7 +18,7 @@ public class RobotController {
 
     public RobotController(RobotPanel robotPanel) {
         this.robotPanel = robotPanel;
-        robot = new Player(new Point2D.Double(100, 100));
+        robot = new Player(new Point(100, 100));
     }
 
     public Point2D.Double getTargetPosition(){
@@ -28,7 +30,7 @@ public class RobotController {
     }
 
     public Point2D.Double getRobotPosition(){
-        return robot.getPosition();
+        return PointExtends.toDouble(robot.getPosition());
     }
 
     public double getRobotDirection(){
@@ -75,7 +77,7 @@ public class RobotController {
             newY = robot.getPosition().y + velocity * duration * Math.sin(robot.getDirection());
         }
 
-        robot.setLocation(keepInsideWindow(newX, newY));
+        robot.setLocation(PointExtends.round(keepInsideWindow(newX, newY)));
         double newDirection = asNormalizedRadians(robot.getDirection() + angularVelocity * duration);
         robot.setDirection(newDirection);
     }

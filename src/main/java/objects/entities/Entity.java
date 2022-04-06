@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import objects.weapons.Weapon;
 
-import java.awt.geom.Point2D;
+import java.awt.*;
 
 public abstract class Entity {
     @Getter
@@ -22,7 +22,7 @@ public abstract class Entity {
 
     @Getter
     @Setter
-    private Point2D.Double position;
+    private Point position;
     @Getter
     @Setter
     private double direction;
@@ -33,7 +33,7 @@ public abstract class Entity {
     private Weapon weapon;
 
     public Entity(
-            Point2D.Double position, int maxAp, Weapon weapon,
+            Point position, int maxAp, Weapon weapon,
             double maxHealth, double attack, double defence, double damage, double initiative
     ) {
         MAX_AP = maxAp;
@@ -59,12 +59,16 @@ public abstract class Entity {
                 health > MAX_HEALTH ? MAX_HEALTH : health;
     }
 
+    public void move(Point dP){
+        move(dP.x, dP.y);
+    }
+
     public void move(double dx, double dy){
         position.x += dx;
         position.y += dy;
     }
 
-    public void setLocation(Point2D.Double location){
+    public void setLocation(Point location){
         position.setLocation(location);
     }
 

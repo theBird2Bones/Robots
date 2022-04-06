@@ -3,7 +3,7 @@ package utility;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class Point2DExtends {
+public class PointExtends {
     static public Point roundWithTranslate(Point2D.Double p, int dx, int dy){
         return new Point(round(p.x + dx), round(p.y + dy));
     }
@@ -14,5 +14,17 @@ public class Point2DExtends {
 
     private static int round(double value) {
         return (int) (value + 0.5);
+    }
+
+    public static Point2D.Double toDouble(Point p){
+        return new Point2D.Double(p.x, p.y);
+    }
+
+    public static Point mult(Point p, int mult){
+        return mult(p, mult, mult);
+    }
+
+    public static Point mult(Point p, int multX, int multY){
+        return new Point(p.x * multX, p.y * multY);
     }
 }

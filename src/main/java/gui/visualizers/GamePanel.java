@@ -1,10 +1,12 @@
 package gui.visualizers;
 
 import lombok.Getter;
+import objects.entities.Player;
 import objects.tiles.DirtTile;
 import objects.tiles.FloorTile;
 import objects.tiles.StoneTile;
 import utility.MapCreator;
+import utility.consts.GlobalConst;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,13 +37,17 @@ public class GamePanel extends JPanel {
     @Getter
     private Map<Point2D, Rectangle> pointToRectangle;
 
+    @Getter
+    private Player player;
+
     private static Timer initTimer() {
-        return new Timer("events generator", true);
+        return new Timer("game paint event generator", true);
     }
 
-    public GamePanel(){
+    public GamePanel() {
         mapCreator = new MapCreator(this);
         pointToRectangle = mapCreator.generatePointToRectangle();
+        player = new Player(findAvailablePoint());
 
         arenaPainter = new ArenaPainter(this);
 
@@ -63,22 +69,42 @@ public class GamePanel extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyChar() == 'l'){
+                if (e.getKeyChar() == 'l') {
                     map = mapCreator.generateMap();
                     pointToRectangle = mapCreator.generatePointToRectangle();
+                    player.setPosition(findAvailablePoint());
+
                     arenaPainter.updateBackground();
                     onRedrawEvent();
+                } else if (e.getKeyChar() == 'w') {
+                    player.move(0, -1);
+                } else if (e.getKeyChar() == 'a') {
+                    player.move(-1, 0);
+                } else if (e.getKeyChar() == 's') {
+                    player.move(0, 1);
+                } else if (e.getKeyChar() == 'd') {
+                    player.move(1, 0);
                 }
             }
         });
+    }
 
+    private Point findAvailablePoint() {
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                if (map[x][y].isPassable()) {
+                    return new Point(x, y);
+                }
+            }
+        }
+        return new Point(0, 0);
     }
 
     protected void onRedrawEvent() {
         EventQueue.invokeLater(this::repaint);
     }
 
-    public Dimension getSize(){
+    public Dimension getSize() {
         return new Dimension(map.length, map[0].length);
     }
 
