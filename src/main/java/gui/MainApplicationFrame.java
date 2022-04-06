@@ -9,16 +9,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ResourceBundle;
 
 
-public class MainApplicationFrame extends JFrame {
+public class MainApplicationFrame extends JFrameWithCustomClose {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final LogWindow logWindow;
 
     public MainApplicationFrame(ResourceBundle bundle) {
+        super(bundle);
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
 
@@ -36,14 +35,6 @@ public class MainApplicationFrame extends JFrame {
         addWindow(createGameWindow(bundle));
 
         setJMenuBar(generateMenuBar(bundle));
-
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                CloseFrame.closeApp(MainApplicationFrame.this, bundle);
-            }
-        });
 
         logWindow.setVisible(false);
     }
@@ -87,7 +78,7 @@ public class MainApplicationFrame extends JFrame {
         var configMenu = new JMenu(bundle.getString(LocalizationKey.CONFIG_MENU_NAME.value()));
 
         var exitButton = new JMenuItem(bundle.getString(LocalizationKey.EXIT_BUTTON_NAME.value()));
-        exitButton.addActionListener(l -> CloseFrame.closeApp(this, bundle));
+        exitButton.addActionListener(l -> onCloseAppEvent(this, bundle));
 
         configMenu.add(createLookAndFeelMenu(bundle));
         configMenu.add(exitButton);
