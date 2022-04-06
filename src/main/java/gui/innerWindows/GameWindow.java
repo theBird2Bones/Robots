@@ -1,14 +1,13 @@
 package gui.innerWindows;
 
+import gui.JInternalFrameWithCustomClose;
+import gui.visualizers.GamePanel;
 import localizer.LocalizationKey;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.ResourceBundle;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 public class GameWindow extends JInternalFrameWithCustomClose {
 

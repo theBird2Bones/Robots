@@ -5,11 +5,12 @@ import java.awt.EventQueue;
 import java.awt.TextArea;
 import java.util.ResourceBundle;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import gui.CloseFrame;
+import gui.JInternalFrameWithCustomClose;
 import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;
