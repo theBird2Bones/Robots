@@ -32,14 +32,6 @@ public class LogWindow extends JInternalFrameWithCustomClose implements LogChang
         panel.add(logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addInternalFrameListener(new InternalFrameAdapter() {
-            @Override
-            public void internalFrameClosing(InternalFrameEvent e) {
-                CloseFrame.closeInternalFrame(LogWindow.this, bundle);
-            }
-        });
-
         pack();
         updateLogContent();
     }
