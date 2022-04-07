@@ -3,6 +3,7 @@ package gui.visualizers;
 import objects.tiles.DirtTile;
 import objects.tiles.PrecipiceTile;
 import objects.tiles.StoneTile;
+import objects.tiles.Tile;
 import utility.PointExtends;
 import utility.consts.GlobalConst;
 
@@ -31,7 +32,6 @@ public class ArenaPainter {
     }
 
     public void paint(Graphics2D g2d){
-        var arenaSize = gamePanel.getSize();
         BufferedImage backgroundImage;
 
         synchronized (this) {
@@ -40,11 +40,7 @@ public class ArenaPainter {
         var bgG2d = backgroundImage.createGraphics();
         paintPlayer(bgG2d);
 
-        g2d.drawImage(
-                backgroundImage, 0, 0,
-                arenaSize.width * tileWidth, arenaSize.height * tileHeight,
-                gamePanel
-        );
+        paintOnPanel(g2d, backgroundImage);
     }
 
     private static BufferedImage copyBufferedImage(BufferedImage bi){
@@ -63,9 +59,20 @@ public class ArenaPainter {
         g2d.drawOval(point.x, point.y, tileWidth / 2, tileHeight / 2);
     }
 
+    private void paintOnPanel(Graphics2D g2d, BufferedImage backgroundImage){
+        var arenaSize = gamePanel.getMapSize();
+
+        g2d.drawImage(
+                backgroundImage, 0, 0,
+                arenaSize.width * tileWidth, arenaSize.height * tileHeight,
+                gamePanel
+        );
+    }
+
     private void createBackground() {
-        var arenaSize = gamePanel.getSize();
+        var arenaSize = gamePanel.getMapSize();
         var pointToRectangle = gamePanel.getPointToRectangle();
+        Graphics2D g2d;
 
         synchronized (this){
             backgroundImage = new BufferedImage(
@@ -73,25 +80,27 @@ public class ArenaPainter {
                     arenaSize.height * tileHeight,
                     BufferedImage.TYPE_INT_RGB
             );
+            g2d = backgroundImage.createGraphics();
         }
-        var g2d = backgroundImage.createGraphics();
+
 
         for (int x = 0; x < arenaSize.width; x++) {
             for (int y = 0; y < arenaSize.height; y++) {
                 var rec = pointToRectangle.get(new Point(x, y));
-                g2d.setColor(Color.black);
-                g2d.drawRect(rec.x, rec.y, rec.width, rec.height);
-
-                var color = switch (gamePanel.getMap()[x][y]) {
-                    case StoneTile e -> Color.darkGray;
-                    case DirtTile e -> new Color(180, 87, 43);
-                    case PrecipiceTile e -> Color.black;
-                    default -> Color.gray;
-                };
+                var color = chooseColor(gamePanel.getMap()[x][y]);
 
                 drawFillRect(g2d, color, rec);
             }
         }
+    }
+
+    private Color chooseColor(Tile tile){
+        return switch (tile) {
+            case StoneTile e -> Color.darkGray;
+            case DirtTile e -> new Color(180, 87, 43);
+            case PrecipiceTile e -> Color.black;
+            default -> Color.gray;
+        };
     }
 
     private void drawFillRect(Graphics2D g2d, Color color, Rectangle rec) {

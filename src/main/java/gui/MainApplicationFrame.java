@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import java.beans.PropertyVetoException;
 import java.util.ResourceBundle;
 
 
@@ -26,17 +27,26 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
         setBounds(inset, inset,
                 screenSize.width - inset * 2,
                 screenSize.height - inset * 2);
+        desktopPane.setSize(getSize());
 
         setContentPane(desktopPane);
 
         logWindow = createLogWindow(bundle);
-
         addWindow(logWindow);
-        addWindow(createGameWindow(bundle));
+        logWindow.setVisible(false);
+
+        var gameWindow = createGameWindow(bundle);
+        addWindow(gameWindow);
+        try {
+            gameWindow.setMaximum(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        gameWindow.setFocusable(true);
 
         setJMenuBar(generateMenuBar(bundle));
 
-        logWindow.setVisible(false);
+        setUndecorated(true);
     }
 
     protected void addWindow(JInternalFrame frame) {
@@ -57,10 +67,14 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
     }
 
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle, new Dimension(500, 500));
+        var size = desktopPane.getSize();
+        GameWindow gameWindow = new GameWindow(bundle, size);
 
-        gameWindow.setLocation(10, 10);
+        gameWindow.setLocation(0, 0);
         gameWindow.setMinimumSize(gameWindow.getSize());
+//        gameWindow.setMaximizable(true);
+        gameWindow.moveToFront();
+
 
         return gameWindow;
     }

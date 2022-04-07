@@ -6,7 +6,6 @@ import objects.tiles.DirtTile;
 import objects.tiles.FloorTile;
 import objects.tiles.StoneTile;
 import utility.MapCreator;
-import utility.consts.GlobalConst;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +43,9 @@ public class GamePanel extends JPanel {
         return new Timer("game paint event generator", true);
     }
 
-    public GamePanel() {
+    public GamePanel(Dimension d) {
+        setSize(d);
+
         mapCreator = new MapCreator(this);
         pointToRectangle = mapCreator.generatePointToRectangle();
         player = new Player(findAvailablePoint());
@@ -55,6 +56,9 @@ public class GamePanel extends JPanel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if(!isFocusable()){
+                    requestFocusInWindow();
+                }
                 onRedrawEvent();
             }
         }, 0, 50);
@@ -69,20 +73,20 @@ public class GamePanel extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyChar() == 'l') {
+                if (e.getKeyCode() == 76) {
                     map = mapCreator.generateMap();
                     pointToRectangle = mapCreator.generatePointToRectangle();
                     player.setPosition(findAvailablePoint());
 
                     arenaPainter.updateBackground();
                     onRedrawEvent();
-                } else if (e.getKeyChar() == 'w') {
+                } else if (e.getKeyCode() == 87) {
                     player.move(0, -1);
-                } else if (e.getKeyChar() == 'a') {
+                } else if (e.getKeyCode() == 65) {
                     player.move(-1, 0);
-                } else if (e.getKeyChar() == 's') {
+                } else if (e.getKeyCode() == 83) {
                     player.move(0, 1);
-                } else if (e.getKeyChar() == 'd') {
+                } else if (e.getKeyCode() == 68) {
                     player.move(1, 0);
                 }
             }
@@ -104,7 +108,7 @@ public class GamePanel extends JPanel {
         EventQueue.invokeLater(this::repaint);
     }
 
-    public Dimension getSize() {
+    public Dimension getMapSize() {
         return new Dimension(map.length, map[0].length);
     }
 

@@ -18,7 +18,7 @@ public class GameWindow extends JInternalFrameWithCustomClose {
 
         JPanel panel = new JPanel(new BorderLayout());
 //        panel.add(new RobotPanel(d), BorderLayout.CENTER);
-        panel.add(new GamePanel(), BorderLayout.CENTER);
+        panel.add(new GamePanel(d), BorderLayout.CENTER);
         getContentPane().add(panel);
 
         pack();

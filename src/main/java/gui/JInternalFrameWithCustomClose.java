@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.util.ResourceBundle;
 
 public class JInternalFrameWithCustomClose extends JInternalFrame {
@@ -33,6 +34,9 @@ public class JInternalFrameWithCustomClose extends JInternalFrame {
                                          boolean resizable, boolean closable,
                                          boolean maximizable, boolean iconifiable){
         super(title, resizable, closable, maximizable, iconifiable);
+
+        ((BasicInternalFrameUI)getUI()).setNorthPane(null);
+        setBorder(null);
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addInternalFrameListener(new InternalFrameAdapter() {
