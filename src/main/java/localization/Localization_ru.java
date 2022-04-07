@@ -19,6 +19,7 @@ public class Localization_ru extends ListResourceBundle {
                 {TEST_LOG_BUTTON_NAME.value(), "Сообщение в лог"},
 
                 {GAME_WINDOW_NAME.value(), "Меню игры"},
+                {LOG_WINDOW_NAME.value(), "Протокол работы"},
 
                 {CLOSING_FRAME_TITLE.value(), "Подтверждение"},
                 {CLOSING_FRAME_MESSAGE.value(), "Закрыть окно?"},
