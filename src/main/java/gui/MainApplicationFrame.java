@@ -3,7 +3,7 @@ package gui;
 import localizer.LocalizationKey;
 import log.Logger;
 import utility.JMenuItemBundled;
-import utility.ObservableLanguage;
+import utility.ObservableLocalization;
 
 import static localizer.LocalizationKey.*;
 import javax.swing.*;
@@ -84,22 +84,22 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
         var languageMenu = JMenuItemBundled.of(new JMenu(), bundle, LANGUAGE_MENU_TITLE);
         var englishButton = JMenuItemBundled.of(new JMenuItem(), bundle, LANGUAGE_MENU_ENGLISH);
         englishButton.getItem().addActionListener(l ->
-                ObservableLanguage.instance().changeLocale(Locale.ENGLISH) );
+                ObservableLocalization.instance().changeLocale(Locale.ENGLISH) );
 
         var russianButton = JMenuItemBundled.of(new JMenuItem(), bundle, LANGUAGE_MENU_RUSSIAN);
         russianButton.getItem().addActionListener(l ->
-                ObservableLanguage.instance().changeLocale(new Locale("ru")));
+                ObservableLocalization.instance().changeLocale(new Locale("ru")));
 
         languageMenu.add(englishButton).add(russianButton);
 
         var exitButton = JMenuItemBundled.of(new JMenuItem(),bundle, EXIT_BUTTON_NAME);
-        exitButton.getItem().addActionListener(l -> onCloseAppEvent(this, bundle));
+        exitButton.getItem().addActionListener(l -> onCloseAppEvent(this));
 
         config.getItem().add(createLookAndFeelMenu(bundle));
         config.add(languageMenu);
         config.add(exitButton);
 
-        ObservableLanguage.instance().setListeners(config, languageMenu, englishButton, russianButton, exitButton);
+        ObservableLocalization.instance().addListeners(config, languageMenu, englishButton, russianButton, exitButton);
 
         return config.getItem();
     }
@@ -111,7 +111,7 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
         addSystemLookAndFeel(lookAndFeelMenu.getItem(), bundle);
         addCrossplatformLookAndFeel(lookAndFeelMenu.getItem(), bundle);
 
-        ObservableLanguage.instance().setListener(lookAndFeelMenu);
+        ObservableLocalization.instance().addListener(lookAndFeelMenu);
         return lookAndFeelMenu.getItem();
     }
 
@@ -123,7 +123,7 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
             this.invalidate();
         });
 
-        ObservableLanguage.instance().setListener(systemLookAndFeel);
+        ObservableLocalization.instance().addListener(systemLookAndFeel);
         lookAndFeelMenu.add(systemLookAndFeel.getItem());
     }
 
@@ -134,7 +134,7 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
             this.invalidate();
         });
 
-        ObservableLanguage.instance().setListener(crossplatformLookAndFeel);
+        ObservableLocalization.instance().addListener(crossplatformLookAndFeel);
         lookAndFeelMenu.add(crossplatformLookAndFeel.getItem());
     }
 
@@ -151,7 +151,7 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
         testMenu.add(switchLogMenuVisibleItem);
         testMenu.add(addLogMessageItem);
 
-        ObservableLanguage.instance().setListeners(testMenu, switchLogMenuVisibleItem, addLogMessageItem);
+        ObservableLocalization.instance().addListeners(testMenu, switchLogMenuVisibleItem, addLogMessageItem);
 
         return testMenu.getItem();
     }

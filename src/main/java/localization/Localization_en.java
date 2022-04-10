@@ -29,7 +29,7 @@ public class Localization_en extends ListResourceBundle {
 
                 {LANGUAGE_MENU_TITLE.value(), "Switch language"},
                 {LANGUAGE_MENU_ENGLISH.value(), "English"},
-                {LANGUAGE_MENU_RUSSIAN.value(), "Russian"},
+                {LANGUAGE_MENU_RUSSIAN.value(), "Русский"},
 
                 {TEST_MENU_NAME.value(), "Tests"}
         };

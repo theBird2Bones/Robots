@@ -15,13 +15,13 @@ public class JMenuItemBundled implements ChangingLanguage{
     private JMenuItemBundled(JMenuItem inst, ResourceBundle bundle, LocalizationKey key){
         item = inst;
         this.key = key;
-        update(bundle);
+        changeLanguageWith(bundle);
     }
     public static JMenuItemBundled of(JMenuItem inst, ResourceBundle bundle, LocalizationKey key){
         return new JMenuItemBundled(inst, bundle, key);
     }
     @Override
-    public void update(ResourceBundle bundle) {
+    public void changeLanguageWith(ResourceBundle bundle) {
         item.setText(bundle.getString(key.value()));
     }
 

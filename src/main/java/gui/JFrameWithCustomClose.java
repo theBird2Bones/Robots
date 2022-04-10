@@ -12,12 +12,12 @@ public class JFrameWithCustomClose extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                onCloseAppEvent(JFrameWithCustomClose.this, bundle);
+                onCloseAppEvent(JFrameWithCustomClose.this);
             }
         });
     }
 
-    protected void onCloseAppEvent(Component frame, ResourceBundle bundle){
-        CloseFrame.closeApp(frame, bundle);
+    protected void onCloseAppEvent(Component frame){
+        CloseFrame.closeApp(frame);
     }
 }
