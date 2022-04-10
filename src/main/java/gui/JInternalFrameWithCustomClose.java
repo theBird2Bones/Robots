@@ -38,7 +38,7 @@ public class JInternalFrameWithCustomClose extends JInternalFrame {
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
-                CloseFrame.closeInternalFrame(JInternalFrameWithCustomClose.this, bundle);
+                CloseFrame.closeInternalFrame(JInternalFrameWithCustomClose.this);
             }
         });
     }

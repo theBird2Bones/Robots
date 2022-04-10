@@ -26,6 +26,10 @@ public class Localization_ru extends ListResourceBundle {
                 {CLOSING_FRAME_OPTION_YES.value(), "Да"},
                 {CLOSING_FRAME_OPTION_NO.value(), "Нет"},
 
+                {LANGUAGE_MENU_TITLE.value(), "Смена языка"},
+                {LANGUAGE_MENU_ENGLISH.value(), "English"},
+                {LANGUAGE_MENU_RUSSIAN.value(), "Русский"},
+
                 {TEST_MENU_NAME.value(), "Тесты"}
         };
     }
