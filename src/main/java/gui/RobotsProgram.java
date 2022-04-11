@@ -1,6 +1,7 @@
 package gui;
 
 import localizer.LocalizationManager;
+import utility.ObservableLocalization;
 
 import java.awt.Frame;
 import java.util.Locale;
@@ -18,10 +19,10 @@ public class RobotsProgram {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        var localizer = LocalizationManager.getResourceBundle(Locale.getDefault());
+        ObservableLocalization.instance().changeLocale(Locale.getDefault());
 
         SwingUtilities.invokeLater(() -> {
-            MainApplicationFrame frame = new MainApplicationFrame(localizer);
+            MainApplicationFrame frame = new MainApplicationFrame(ObservableLocalization.instance().getBundle());
             frame.pack();
             frame.setVisible(true);
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
