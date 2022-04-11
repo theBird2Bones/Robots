@@ -19,11 +19,17 @@ public class Localization_en extends ListResourceBundle {
                 {TEST_LOG_BUTTON_NAME.value(), "Message in log"},
 
                 {GAME_WINDOW_NAME.value(), "Game window"},
+                {LOG_WINDOW_NAME.value(), "Work protocol"},
 
                 {CLOSING_FRAME_TITLE.value(), "Confirmation"},
                 {CLOSING_FRAME_MESSAGE.value(), "Close the window?"},
                 {CLOSING_FRAME_OPTION_YES.value(), "Yes"},
                 {CLOSING_FRAME_OPTION_NO.value(), "No"},
+
+
+                {LANGUAGE_MENU_TITLE.value(), "Switch language"},
+                {LANGUAGE_MENU_ENGLISH.value(), "English"},
+                {LANGUAGE_MENU_RUSSIAN.value(), "Русский"},
 
                 {TEST_MENU_NAME.value(), "Tests"}
         };

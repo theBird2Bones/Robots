@@ -2,21 +2,24 @@ package gui;
 
 import localizer.LocalizationKey;
 import log.Logger;
+import utility.JMenuItemBundled;
+import utility.ObservableLocalization;
 
+import static localizer.LocalizationKey.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 
-public class MainApplicationFrame extends JFrame {
+public class MainApplicationFrame extends JFrameWithCustomClose {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final LogWindow logWindow;
 
     public MainApplicationFrame(ResourceBundle bundle) {
+        super(bundle);
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
 
@@ -34,14 +37,6 @@ public class MainApplicationFrame extends JFrame {
         addWindow(createGameWindow(bundle));
 
         setJMenuBar(generateMenuBar(bundle));
-
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                CloseFrame.closeApp(MainApplicationFrame.this, bundle);
-            }
-        });
 
         logWindow.setVisible(false);
     }
@@ -64,10 +59,9 @@ public class MainApplicationFrame extends JFrame {
     }
 
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle);
+        GameWindow gameWindow = new GameWindow(bundle, new Dimension(500, 500));
 
         gameWindow.setLocation(10, 10);
-        gameWindow.setSize(400, 400);
         gameWindow.setMinimumSize(gameWindow.getSize());
 
         return gameWindow;
@@ -82,69 +76,84 @@ public class MainApplicationFrame extends JFrame {
         return menuBar;
     }
 
-    private JMenu createConfigMenu(ResourceBundle bundle) {
-        var configMenu = new JMenu(bundle.getString(LocalizationKey.CONFIG_MENU_NAME.value()));
 
-        var exitButton = new JMenuItem(bundle.getString(LocalizationKey.EXIT_BUTTON_NAME.value()));
-        exitButton.addActionListener(l -> CloseFrame.closeApp(this, bundle));
 
-        configMenu.add(createLookAndFeelMenu(bundle));
-        configMenu.add(exitButton);
+    private JMenuItem createConfigMenu(ResourceBundle bundle) {
+        var config = JMenuItemBundled.of(new JMenu(), bundle, CONFIG_MENU_NAME);
 
-        return configMenu;
+        var languageMenu = JMenuItemBundled.of(new JMenu(), bundle, LANGUAGE_MENU_TITLE);
+        var englishButton = JMenuItemBundled.of(new JMenuItem(), bundle, LANGUAGE_MENU_ENGLISH);
+        englishButton.getItem().addActionListener(l ->
+                ObservableLocalization.instance().changeLocale(Locale.ENGLISH) );
+
+        var russianButton = JMenuItemBundled.of(new JMenuItem(), bundle, LANGUAGE_MENU_RUSSIAN);
+        russianButton.getItem().addActionListener(l ->
+                ObservableLocalization.instance().changeLocale(new Locale("ru")));
+
+        languageMenu.add(englishButton).add(russianButton);
+
+        var exitButton = JMenuItemBundled.of(new JMenuItem(),bundle, EXIT_BUTTON_NAME);
+        exitButton.getItem().addActionListener(l -> onCloseAppEvent(this));
+
+        config.getItem().add(createLookAndFeelMenu(bundle));
+        config.add(languageMenu);
+        config.add(exitButton);
+
+        ObservableLocalization.instance().addListeners(config, languageMenu, englishButton, russianButton, exitButton);
+
+        return config.getItem();
     }
 
-    private JMenu createLookAndFeelMenu(ResourceBundle bundle) {
-        JMenu lookAndFeelMenu =
-                new JMenu(bundle.getString(LocalizationKey.VIEW_MODE_MENU_NAME.value()));
+    private JMenuItem createLookAndFeelMenu(ResourceBundle bundle) {
+        var lookAndFeelMenu = JMenuItemBundled.of(new JMenu(), bundle, VIEW_MODE_MENU_NAME);
 
-        lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
-        addSystemLookAndFeel(lookAndFeelMenu, bundle);
-        addCrossplatformLookAndFeel(lookAndFeelMenu, bundle);
+        lookAndFeelMenu.getItem().setMnemonic(KeyEvent.VK_V);
+        addSystemLookAndFeel(lookAndFeelMenu.getItem(), bundle);
+        addCrossplatformLookAndFeel(lookAndFeelMenu.getItem(), bundle);
 
-        return lookAndFeelMenu;
+        ObservableLocalization.instance().addListener(lookAndFeelMenu);
+        return lookAndFeelMenu.getItem();
     }
 
-    private void addSystemLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
-        JMenuItem systemLookAndFeel =
-                new JMenuItem(bundle.getString(LocalizationKey.SYSTEM_SCHEME_NAME.value()), KeyEvent.VK_S);
+    private void addSystemLookAndFeel(JMenuItem lookAndFeelMenu, ResourceBundle bundle) {
+        var systemLookAndFeel = JMenuItemBundled.of(new JMenuItem(), bundle, SYSTEM_SCHEME_NAME);
 
-        systemLookAndFeel.addActionListener((event) -> {
+        systemLookAndFeel.getItem().addActionListener((event) -> {
             setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             this.invalidate();
         });
 
-        lookAndFeelMenu.add(systemLookAndFeel);
+        ObservableLocalization.instance().addListener(systemLookAndFeel);
+        lookAndFeelMenu.add(systemLookAndFeel.getItem());
     }
 
-    private void addCrossplatformLookAndFeel(JMenu lookAndFeelMenu, ResourceBundle bundle) {
-        JMenuItem crossplatformLookAndFeel =
-                new JMenuItem(bundle.getString(LocalizationKey.UNIVERSAL_SCHEME_NAME.value()), KeyEvent.VK_S);
-        crossplatformLookAndFeel.addActionListener((event) -> {
+    private void addCrossplatformLookAndFeel(JMenuItem lookAndFeelMenu, ResourceBundle bundle) {
+        var crossplatformLookAndFeel = JMenuItemBundled.of(new JMenuItem(), bundle, UNIVERSAL_SCHEME_NAME);
+        crossplatformLookAndFeel.getItem().addActionListener((event) -> {
             setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             this.invalidate();
         });
 
-        lookAndFeelMenu.add(crossplatformLookAndFeel);
+        ObservableLocalization.instance().addListener(crossplatformLookAndFeel);
+        lookAndFeelMenu.add(crossplatformLookAndFeel.getItem());
     }
 
-    private JMenu createLogMenu(ResourceBundle bundle) {
-        JMenu testMenu = new JMenu(bundle.getString(LocalizationKey.TEST_MENU_NAME.value()));
-        testMenu.setMnemonic(KeyEvent.VK_T);
+    private JMenuItem createLogMenu(ResourceBundle bundle) {
+        var testMenu = JMenuItemBundled.of(new JMenu(), bundle, TEST_MENU_NAME);
+        testMenu.getItem().setMnemonic(KeyEvent.VK_T);
 
-        JMenuItem addLogMessageItem = new JMenuItem(
-                bundle.getString(LocalizationKey.TEST_MENU_NAME.value()),
-                KeyEvent.VK_S
-        );
-        addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
+        var addLogMessageItem = JMenuItemBundled.of(new JMenuItem(), bundle, TEST_LOG_BUTTON_NAME);
+        addLogMessageItem.getItem().addActionListener((event) -> Logger.debug("Новая строка"));
 
-        JMenuItem switchLogMenuVisibleItem = new JMenuItem(bundle.getString(LocalizationKey.SWITCHER_NAME.value()));
-        switchLogMenuVisibleItem.addActionListener((event) -> logWindow.setVisible(!logWindow.isVisible()));
+        var switchLogMenuVisibleItem = JMenuItemBundled.of(new JMenuItem(), bundle, SWITCHER_NAME);
+        switchLogMenuVisibleItem.getItem().addActionListener((event) -> logWindow.setVisible(!logWindow.isVisible()));
 
         testMenu.add(switchLogMenuVisibleItem);
         testMenu.add(addLogMessageItem);
 
-        return testMenu;
+        ObservableLocalization.instance().addListeners(testMenu, switchLogMenuVisibleItem, addLogMessageItem);
+
+        return testMenu.getItem();
     }
 
     private void setLookAndFeel(String className) {
