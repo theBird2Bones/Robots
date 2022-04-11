@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.sql.Array;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,13 +46,13 @@ public class GamePanel extends JPanel {
 
     public GamePanel(Dimension d) {
         setSize(d);
+        setBackground(Color.black);
 
         mapCreator = new MapCreator(this);
         pointToRectangle = mapCreator.generatePointToRectangle();
         player = new Player(findAvailablePoint());
 
         arenaPainter = new ArenaPainter(this);
-
 
         timer.schedule(new TimerTask() {
             @Override

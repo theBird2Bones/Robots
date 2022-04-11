@@ -22,16 +22,16 @@ public class ArenaPainter {
         createBackground();
     }
 
-    public void repaintAll(Graphics2D g2d){
+    public void repaintAll(Graphics2D g2d) {
         updateBackground();
         paint(g2d);
     }
 
-    public void updateBackground(){
+    public void updateBackground() {
         createBackground();
     }
 
-    public void paint(Graphics2D g2d){
+    public void paint(Graphics2D g2d) {
         BufferedImage backgroundImage;
 
         synchronized (this) {
@@ -43,7 +43,7 @@ public class ArenaPainter {
         paintOnPanel(g2d, backgroundImage);
     }
 
-    private static BufferedImage copyBufferedImage(BufferedImage bi){
+    private static BufferedImage copyBufferedImage(BufferedImage bi) {
         var colorModel = bi.getColorModel();
         return new BufferedImage(
                 colorModel,
@@ -53,20 +53,29 @@ public class ArenaPainter {
         );
     }
 
-    private void paintPlayer(Graphics2D g2d){
+    private void paintPlayer(Graphics2D g2d) {
         var point = PointExtends.mult(gamePanel.getPlayer().getPosition(), tileWidth, tileHeight);
         g2d.setColor(Color.red);
         g2d.drawOval(point.x, point.y, tileWidth / 2, tileHeight / 2);
     }
 
-    private void paintOnPanel(Graphics2D g2d, BufferedImage backgroundImage){
-        var arenaSize = gamePanel.getMapSize();
+    private void paintOnPanel(Graphics2D g2d, BufferedImage backgroundImage) {
+        var arenaSize = toPhysics(gamePanel.getMapSize());
+        var panelSize = gamePanel.getSize();
+        var imagePosition = new Point(
+                panelSize.width / 2 - arenaSize.width / 2,
+                panelSize.height / 2 - arenaSize.height / 2
+        );
 
         g2d.drawImage(
-                backgroundImage, 0, 0,
-                arenaSize.width * tileWidth, arenaSize.height * tileHeight,
+                backgroundImage, imagePosition.x, imagePosition.y,
+                arenaSize.width, arenaSize.height,
                 gamePanel
         );
+    }
+
+    private Dimension toPhysics(Dimension logical){
+        return new Dimension(logical.width * tileWidth, logical.height * tileHeight);
     }
 
     private void createBackground() {
@@ -74,7 +83,7 @@ public class ArenaPainter {
         var pointToRectangle = gamePanel.getPointToRectangle();
         Graphics2D g2d;
 
-        synchronized (this){
+        synchronized (this) {
             backgroundImage = new BufferedImage(
                     arenaSize.width * tileWidth,
                     arenaSize.height * tileHeight,
@@ -94,7 +103,7 @@ public class ArenaPainter {
         }
     }
 
-    private Color chooseColor(Tile tile){
+    private Color chooseColor(Tile tile) {
         return switch (tile) {
             case StoneTile e -> Color.darkGray;
             case DirtTile e -> new Color(180, 87, 43);
