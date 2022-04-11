@@ -1,11 +1,9 @@
 package gui;
 
-import localizer.LocalizationKey;
 import utility.ObservableLocalization;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ResourceBundle;
 
 import static localizer.LocalizationKey.*;
 public class CloseFrame {

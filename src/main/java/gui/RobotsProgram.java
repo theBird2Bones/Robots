@@ -1,6 +1,5 @@
 package gui;
 
-import localizer.LocalizationManager;
 import utility.ObservableLocalization;
 
 import java.awt.Frame;
