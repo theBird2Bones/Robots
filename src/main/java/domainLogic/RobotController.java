@@ -3,6 +3,7 @@ package domainLogic;
 import gui.visualizers.RobotPanel;
 import objects.entities.Player;
 import utility.PointExtends;
+import utility.Utility;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -62,8 +63,8 @@ public class RobotController {
     }
 
     private void moveRobot(double velocity, double angularVelocity, double duration) {
-        velocity = applyLimits(velocity, 0, MAX_VELOCITY);
-        angularVelocity = applyLimits(angularVelocity, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
+        velocity = Utility.applyLimits(velocity, 0, MAX_VELOCITY);
+        angularVelocity = Utility.applyLimits(angularVelocity, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 
         double newX = robot.getPosition().x + velocity / angularVelocity *
                 (Math.sin(robot.getDirection() + angularVelocity * duration) - Math.sin(robot.getDirection()));
@@ -84,13 +85,9 @@ public class RobotController {
 
     private Point2D.Double keepInsideWindow(double X, double Y){
         return new Point2D.Double(
-                applyLimits(X, 0, robotPanel.getWidth()),
-                applyLimits(Y, 0, robotPanel.getHeight())
+                Utility.applyLimits(X, 0, robotPanel.getWidth()),
+                Utility.applyLimits(Y, 0, robotPanel.getHeight())
         );
-    }
-
-    private static double applyLimits(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
     }
 
     private static double distance(double x1, double y1, double x2, double y2) {
