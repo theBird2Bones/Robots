@@ -1,5 +1,6 @@
 package gui;
 
+import utility.InternalFramesManager;
 import utility.ObservableLocalization;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class CloseFrame {
         if(showDialogBox(frame) == 0){
             frame.setVisible(false);
             frame.dispose();
+            InternalFramesManager.instance().unregisterFrame(frame.getClass());
         }
     }
 
