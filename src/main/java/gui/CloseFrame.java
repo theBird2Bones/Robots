@@ -1,5 +1,6 @@
 package gui;
 
+import utility.InternalFramesManager;
 import localizer.LocalizationKey;
 import utility.ObservableLocalization;
 
@@ -17,12 +18,13 @@ public class CloseFrame {
     }
   }
 
-  public static void closeInternalFrame(JInternalFrame frame) {
-    if (showDialogBox(frame) == 0) {
-      frame.setVisible(false);
-      frame.dispose();
+    public static void closeInternalFrame(JInternalFrame frame){
+        if(showDialogBox(frame) == 0){
+            frame.setVisible(false);
+            frame.dispose();
+            InternalFramesManager.instance().unregisterFrame(frame.getClass());
+        }
     }
-  }
 
   private static int showDialogBox(Component frame) {
     Object[] option =

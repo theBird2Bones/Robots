@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
-public class GameWindow extends JInternalFrameWithCustomClose {
+public class GameWindow extends JInternalFrameExtended {
 
   public GameWindow(ResourceBundle bundle, Dimension d) {
     super(

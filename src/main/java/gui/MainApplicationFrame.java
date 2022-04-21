@@ -1,6 +1,9 @@
 package gui;
 
+import localizer.LocalizationKey;
 import log.Logger;
+import utility.InternalFramesManager;
+import utility.JMenuItemBundled;
 import utility.ObservableLocalization;
 
 import static localizer.LocalizationKey.*;
@@ -11,9 +14,10 @@ import java.awt.event.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class MainApplicationFrame extends JFrameWithCustomClose {
-  private final JDesktopPane desktopPane = new JDesktopPane();
-  private final LogWindow logWindow;
+
+public class MainApplicationFrame extends JFrameExtended {
+    private final JDesktopPane desktopPane = new JDesktopPane();
+//    private final LogWindow logWindow;
 
   public MainApplicationFrame(ResourceBundle bundle) {
     super(bundle);
@@ -26,7 +30,8 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
 
     setContentPane(desktopPane);
 
-    logWindow = createLogWindow(bundle);
+        var logWindow = createLogWindow(bundle);
+        InternalFramesManager.instance().registerFrame(logWindow);
 
     addWindow(logWindow);
     addWindow(createGameWindow(bundle));
@@ -144,9 +149,11 @@ public class MainApplicationFrame extends JFrameWithCustomClose {
     var addLogMessageItem = new JMenuItemBundled(bundle, TEST_LOG_BUTTON_NAME);
     addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
 
-    var switchLogMenuVisibleItem = new JMenuItemBundled(bundle, SWITCHER_NAME);
-    switchLogMenuVisibleItem
-        .addActionListener((event) -> logWindow.setVisible(!logWindow.isVisible()));
+        var switchLogMenuVisibleItem = JMenuItemBundled.of(new JMenuItem(), bundle, SWITCHER_NAME);
+        switchLogMenuVisibleItem.getItem().addActionListener((event) -> {
+            var logWindow = InternalFramesManager.instance().getFrameInstance(LogWindow.class);
+            logWindow.setVisible(!logWindow.isVisible());
+        });
 
     testMenu.add(switchLogMenuVisibleItem);
     testMenu.add(addLogMessageItem);
