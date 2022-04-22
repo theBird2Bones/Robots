@@ -9,16 +9,15 @@ import javax.swing.JPanel;
 
 public class GameWindow extends JInternalFrameWithCustomClose {
 
-    public GameWindow(ResourceBundle bundle, Dimension d) {
-        super(bundle, bundle.getString(LocalizationKey.GAME_WINDOW_NAME.value()),
-                true, true,
-                true, true);
+  public GameWindow(ResourceBundle bundle, Dimension d) {
+    super(
+        bundle, bundle.getString(LocalizationKey.GAME_WINDOW_NAME.value()), true, true, true, true);
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new GamePanel(d), BorderLayout.CENTER);
-        getContentPane().add(panel);
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.add(new GamePanel(d), BorderLayout.CENTER);
+    getContentPane().add(panel);
 
-        pack();
-        setSize(d);
-    }
+    pack();
+    setSize(d);
+  }
 }
