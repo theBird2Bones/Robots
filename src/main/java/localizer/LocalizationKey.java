@@ -1,37 +1,46 @@
 package localizer;
 
 public enum LocalizationKey {
-  CONFIG_MENU_NAME("configMenuName"),
-  EXIT_BUTTON_NAME("exitButtonName"),
+    CONFIG_MENU_NAME("configMenuName"),
+    EXIT_BUTTON_NAME("exitButtonName"),
 
-  VIEW_MODE_MENU_NAME("viewModeMenuName"),
-  UNIVERSAL_SCHEME_NAME("universalSchemeName"),
-  SYSTEM_SCHEME_NAME("systemSchemeName"),
+    VIEW_MODE_MENU_NAME("viewModeMenuName"),
+    UNIVERSAL_SCHEME_NAME("universalSchemeName"),
+    SYSTEM_SCHEME_NAME("systemSchemeName"),
 
-  SWITCHER_NAME("switcherName"),
-  TEST_LOG_BUTTON_NAME("testLogButtonName"),
+    LOG_SWITCHER_NAME("logSwitcherName"),
+    GAME_SWITCHER_NAME("gameSwitcherName"),
+    TEST_LOG_BUTTON_NAME("testLogButtonName"),
 
-  GAME_WINDOW_NAME("gameWindowName"),
-  LOG_WINDOW_NAME("logWindowName"),
+    GAME_WINDOW_NAME("gameWindowName"),
+    LOG_WINDOW_NAME("logWindowName"),
 
-  CLOSING_FRAME_TITLE("closingFrameTitle"),
-  CLOSING_FRAME_MESSAGE("closingFrameMessage"),
-  CLOSING_FRAME_OPTION_YES("closingFrameOptionYes"),
-  CLOSING_FRAME_OPTION_NO("closingFrameOptionNo"),
+    CLOSING_FRAME_TITLE("closingFrameTitle"),
+    CLOSING_FRAME_MESSAGE("closingFrameMessage"),
 
-  LANGUAGE_MENU_TITLE("languages"),
-  LANGUAGE_MENU_RUSSIAN("russian"),
-  LANGUAGE_MENU_ENGLISH("english"),
+    STATE_LOADING_FRAME_TITLE("stateLoadingFrameTitle"),
+    STATE_LOADING_FRAME_MESSAGE("stateLoadingFrameMessage"),
 
-  TEST_MENU_NAME("testMenuName");
+    OPTION_YES("OptionYes"),
+    OPTION_NO("OptionNo"),
 
-  private final String value;
+    LANGUAGE_MENU_TITLE("languages"),
+    LANGUAGE_MENU_RUSSIAN("russian"),
+    LANGUAGE_MENU_ENGLISH("english"),
 
-  LocalizationKey(String value) {
-    this.value = value;
-  }
+    WINDOWS_MENU_NAME("windowsMenuName");
 
-  public String value() {
-    return value;
-  }
+
+
+
+
+    private final String value;
+
+    LocalizationKey(String value){
+        this.value = value;
+    }
+
+    public String value(){
+        return value;
+    }
 }

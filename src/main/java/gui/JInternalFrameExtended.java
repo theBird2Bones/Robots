@@ -1,8 +1,11 @@
 package gui;
 
+import utility.storage.StorableController;
+
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import java.beans.PropertyVetoException;
 import java.util.ResourceBundle;
 
 public class JInternalFrameExtended extends JInternalFrame {
@@ -18,5 +21,20 @@ public class JInternalFrameExtended extends JInternalFrame {
                 CloseFrame.closeInternalFrame(JInternalFrameExtended.this);
             }
         });
+
+        addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameIconified(InternalFrameEvent e) {
+                try {
+                    setIcon(false);
+                } catch (PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+                setVisible(false);
+            }
+        });
+
+        StorableController.instance().addListener(this);
+        StorableController.instance().setUpFrame(this);
     }
 }
