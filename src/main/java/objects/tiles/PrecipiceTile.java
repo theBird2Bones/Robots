@@ -1,7 +1,10 @@
 package objects.tiles;
 
-public class PrecipiceTile extends FloorTile {
-    public PrecipiceTile() {
-        super(false);
-    }
+import java.awt.*;
+
+public class PrecipiceTile extends NotPassableTile {
+  @Override
+  public Color getColor() {
+    return Color.black;
+  }
 }

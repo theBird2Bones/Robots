@@ -3,9 +3,11 @@ package gui.visualizers;
 import lombok.Getter;
 import objects.entities.Player;
 import objects.tiles.DirtTile;
-import objects.tiles.FloorTile;
+import objects.tiles.PassableTile;
 import objects.tiles.StoneTile;
+import objects.tiles.Tile;
 import utility.MapCreator;
+import utility.MapGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,13 +28,7 @@ public class GamePanel extends JPanel {
     private MapCreator mapCreator;
 
     @Getter
-    private FloorTile[][] map = {
-            {new StoneTile(), new StoneTile(), new StoneTile(), new DirtTile(), new StoneTile()},
-            {new StoneTile(), new StoneTile(), new DirtTile(), new DirtTile(), new StoneTile()},
-            {new DirtTile(), new DirtTile(), new DirtTile(), new StoneTile(), new StoneTile()},
-            {new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile()},
-            {new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile(), new StoneTile()}
-    };
+    private Tile[][] map;
 
     @Getter
     private Map<Point2D, Rectangle> pointToRectangle;
@@ -47,10 +43,24 @@ public class GamePanel extends JPanel {
     public GamePanel(Dimension d) {
         setSize(d);
         setBackground(Color.black);
-
+        var pack =MapGenerator.generate();
+        map = pack.getFirst();
+        var route = pack.getSecond();
         mapCreator = new MapCreator(this);
         pointToRectangle = mapCreator.generatePointToRectangle();
         player = new Player(findAvailablePoint());
+        new Thread(() -> {
+            try {
+                while(true){
+                    for(var e: route){
+                        player.move( e.getFirst(),e.getSecond());
+                        Thread.sleep(100);
+                    }
+                }
+            } catch (InterruptedException e) {
+                System.out.println("oh my");
+            }
+        }).start();
 
         arenaPainter = new ArenaPainter(this);
 
@@ -75,7 +85,7 @@ public class GamePanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 76) {
-                    map = mapCreator.generateMap();
+                    map = MapGenerator.generate().getFirst();
                     pointToRectangle = mapCreator.generatePointToRectangle();
                     player.setPosition(findAvailablePoint());
 
@@ -97,7 +107,7 @@ public class GamePanel extends JPanel {
     private Point findAvailablePoint() {
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
-                if (map[x][y].isPassable()) {
+                if (map[x][y] instanceof PassableTile) {
                     return new Point(x, y);
                 }
             }

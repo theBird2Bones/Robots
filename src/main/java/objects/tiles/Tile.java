@@ -1,6 +1,7 @@
 package objects.tiles;
 
-public interface Tile {
-    boolean isPassable();
-    void setPassability(boolean isPassable);
+import java.awt.*;
+
+public abstract class Tile {
+    abstract public Color getColor();
 }

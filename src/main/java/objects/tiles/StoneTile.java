@@ -1,7 +1,10 @@
 package objects.tiles;
 
-public class StoneTile extends FloorTile{
-    public StoneTile() {
-        super(true);
-    }
+import java.awt.*;
+
+public class StoneTile extends PassableTile {
+  @Override
+  public Color getColor() {
+    return Color.gray;
+  }
 }

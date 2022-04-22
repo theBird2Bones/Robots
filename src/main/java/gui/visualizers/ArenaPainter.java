@@ -96,20 +96,11 @@ public class ArenaPainter {
         for (int x = 0; x < arenaSize.width; x++) {
             for (int y = 0; y < arenaSize.height; y++) {
                 var rec = pointToRectangle.get(new Point(x, y));
-                var color = chooseColor(gamePanel.getMap()[x][y]);
+                var color = (gamePanel.getMap()[x][y]).getColor();
 
                 drawFillRect(g2d, color, rec);
             }
         }
-    }
-
-    private Color chooseColor(Tile tile) {
-        return switch (tile) {
-            case StoneTile e -> Color.darkGray;
-            case DirtTile e -> new Color(180, 87, 43);
-            case PrecipiceTile e -> Color.black;
-            default -> Color.gray;
-        };
     }
 
     private void drawFillRect(Graphics2D g2d, Color color, Rectangle rec) {

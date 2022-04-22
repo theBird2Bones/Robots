@@ -1,7 +1,10 @@
 package objects.tiles;
 
-public class DirtTile extends FloorTile {
-    public DirtTile() {
-        super(true);
-    }
+import java.awt.*;
+
+public class DirtTile extends PassableTile {
+  @Override
+  public Color getColor() {
+    return new Color(180, 87, 43);
+  }
 }

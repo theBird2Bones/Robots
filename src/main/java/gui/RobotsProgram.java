@@ -1,6 +1,7 @@
 package gui;
 
 import localizer.LocalizationManager;
+import utility.MapGenerator;
 
 import java.awt.Frame;
 import java.util.Locale;

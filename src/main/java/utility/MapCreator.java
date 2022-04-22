@@ -2,9 +2,9 @@ package utility;
 
 import gui.visualizers.GamePanel;
 import objects.tiles.DirtTile;
-import objects.tiles.FloorTile;
 import objects.tiles.PrecipiceTile;
 import objects.tiles.StoneTile;
+import objects.tiles.Tile;
 import utility.consts.GlobalConst;
 
 import java.awt.*;
@@ -21,10 +21,10 @@ public class MapCreator {
         this.gamePanel = gamePanel;
     }
 
-    public FloorTile[][] generateMap() {
+    public Tile[][] generateMap() {
         int width = roundUnderWindow(gamePanel.getWidth());
         int height = roundUnderWindow(gamePanel.getHeight());
-        FloorTile[][] tileMap = new FloorTile[width][height];
+        Tile[][] tileMap = new Tile[width][height];
 
         for (var xRow : tileMap) {
             Arrays.fill(xRow, new PrecipiceTile());
@@ -41,7 +41,7 @@ public class MapCreator {
         return tileMap;
     }
 
-    private FloorTile chooseTile(){
+    private Tile chooseTile(){
         double digit = new Random().nextDouble(0, 1);
         if(digit <=  0.7){
             return new StoneTile();
