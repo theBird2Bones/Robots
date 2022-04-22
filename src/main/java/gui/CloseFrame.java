@@ -2,6 +2,7 @@ package gui;
 
 import utility.InternalFramesManager;
 import utility.ObservableLocalization;
+import utility.storage.StorableController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,7 @@ public class CloseFrame {
     public static void closeApp(Component frame){
         if(showDialogBox(frame) == 0){
             frame.setVisible(false);
+            StorableController.instance().saveListeners();
             System.exit(0);
         }
     }
@@ -25,8 +27,8 @@ public class CloseFrame {
 
     private static int showDialogBox(Component frame){
         Object[] option = new Object[] {
-                ObservableLocalization.instance().getBundle().getString(CLOSING_FRAME_OPTION_YES.value()),
-                ObservableLocalization.instance().getBundle().getString(CLOSING_FRAME_OPTION_NO.value()),
+                ObservableLocalization.instance().getBundle().getString(OPTION_YES.value()),
+                ObservableLocalization.instance().getBundle().getString(OPTION_NO.value()),
 
         };
         return JOptionPane.showOptionDialog(

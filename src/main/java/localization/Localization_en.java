@@ -15,7 +15,8 @@ public class Localization_en extends ListResourceBundle {
                 {UNIVERSAL_SCHEME_NAME.value(), "Universal scheme"},
                 {SYSTEM_SCHEME_NAME.value(), "System scheme"},
 
-                {SWITCHER_NAME.value(), "Turn on/off log menu"},
+                {LOG_SWITCHER_NAME.value(), "Turn on/off log window"},
+                {GAME_SWITCHER_NAME.value(), "Turn on/off game window"},
                 {TEST_LOG_BUTTON_NAME.value(), "Message in log"},
 
                 {GAME_WINDOW_NAME.value(), "Game window"},
@@ -23,15 +24,18 @@ public class Localization_en extends ListResourceBundle {
 
                 {CLOSING_FRAME_TITLE.value(), "Confirmation"},
                 {CLOSING_FRAME_MESSAGE.value(), "Close the window?"},
-                {CLOSING_FRAME_OPTION_YES.value(), "Yes"},
-                {CLOSING_FRAME_OPTION_NO.value(), "No"},
 
+                {STATE_LOADING_FRAME_TITLE.value(), "Notice"},
+                {STATE_LOADING_FRAME_MESSAGE.value(), "Saved state found, upload?"},
+
+                {OPTION_YES.value(), "Yes"},
+                {OPTION_NO.value(), "No"},
 
                 {LANGUAGE_MENU_TITLE.value(), "Switch language"},
                 {LANGUAGE_MENU_ENGLISH.value(), "English"},
                 {LANGUAGE_MENU_RUSSIAN.value(), "Русский"},
 
-                {TEST_MENU_NAME.value(), "Tests"}
+                {WINDOWS_MENU_NAME.value(), "Windows"}
         };
     }
 }

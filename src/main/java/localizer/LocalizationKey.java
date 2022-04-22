@@ -8,7 +8,8 @@ public enum LocalizationKey {
     UNIVERSAL_SCHEME_NAME("universalSchemeName"),
     SYSTEM_SCHEME_NAME("systemSchemeName"),
 
-    SWITCHER_NAME("switcherName"),
+    LOG_SWITCHER_NAME("logSwitcherName"),
+    GAME_SWITCHER_NAME("gameSwitcherName"),
     TEST_LOG_BUTTON_NAME("testLogButtonName"),
 
     GAME_WINDOW_NAME("gameWindowName"),
@@ -16,14 +17,18 @@ public enum LocalizationKey {
 
     CLOSING_FRAME_TITLE("closingFrameTitle"),
     CLOSING_FRAME_MESSAGE("closingFrameMessage"),
-    CLOSING_FRAME_OPTION_YES("closingFrameOptionYes"),
-    CLOSING_FRAME_OPTION_NO("closingFrameOptionNo"),
+
+    STATE_LOADING_FRAME_TITLE("stateLoadingFrameTitle"),
+    STATE_LOADING_FRAME_MESSAGE("stateLoadingFrameMessage"),
+
+    OPTION_YES("OptionYes"),
+    OPTION_NO("OptionNo"),
 
     LANGUAGE_MENU_TITLE("languages"),
     LANGUAGE_MENU_RUSSIAN("russian"),
     LANGUAGE_MENU_ENGLISH("english"),
 
-    TEST_MENU_NAME("testMenuName");
+    WINDOWS_MENU_NAME("windowsMenuName");
 
 
 

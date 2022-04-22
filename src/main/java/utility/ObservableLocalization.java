@@ -7,10 +7,12 @@ import java.util.*;
 
 public class ObservableLocalization {
     private static volatile ObservableLocalization instance = null;
-    private static Object syncObj = new Object();
+    private static final Object syncObj = new Object();
     private final List<ChangingLanguage> listeners = new LinkedList<>();
     @Getter
     private ResourceBundle bundle;
+    @Getter
+    private Locale locale;
 
     private ObservableLocalization() {
     }
@@ -41,6 +43,7 @@ public class ObservableLocalization {
     }
 
     public void changeLocale(Locale newLocale) {
+        locale = newLocale;
         bundle = LocalizationManager.getResourceBundle(newLocale);
         updateListeners(bundle);
     }

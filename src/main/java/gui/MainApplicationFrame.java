@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 public class MainApplicationFrame extends JFrameExtended {
     private final JDesktopPane desktopPane = new JDesktopPane();
-//    private final LogWindow logWindow;
 
     public MainApplicationFrame(ResourceBundle bundle) {
         super(bundle);
@@ -35,22 +34,21 @@ public class MainApplicationFrame extends JFrameExtended {
         InternalFramesManager.instance().registerFrame(logWindow);
 
         addWindow(logWindow);
-        addWindow(createGameWindow(bundle));
+
+        var gameWindow = createGameWindow(bundle);
+        InternalFramesManager.instance().registerFrame(gameWindow);
+        addWindow(gameWindow);
 
         setJMenuBar(generateMenuBar(bundle));
-
-        logWindow.setVisible(false);
     }
 
     protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
-        frame.setVisible(true);
     }
 
     protected LogWindow createLogWindow(ResourceBundle bundle) {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
 
-        logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
         logWindow.pack();
@@ -62,7 +60,6 @@ public class MainApplicationFrame extends JFrameExtended {
     protected GameWindow createGameWindow(ResourceBundle bundle) {
         GameWindow gameWindow = new GameWindow(bundle, new Dimension(500, 500));
 
-        gameWindow.setLocation(10, 10);
         gameWindow.setMinimumSize(gameWindow.getSize());
 
         return gameWindow;
@@ -76,8 +73,6 @@ public class MainApplicationFrame extends JFrameExtended {
 
         return menuBar;
     }
-
-
 
     private JMenuItem createConfigMenu(ResourceBundle bundle) {
         var config = JMenuItemBundled.of(new JMenu(), bundle, CONFIG_MENU_NAME);
@@ -140,20 +135,27 @@ public class MainApplicationFrame extends JFrameExtended {
     }
 
     private JMenuItem createLogMenu(ResourceBundle bundle) {
-        var testMenu = JMenuItemBundled.of(new JMenu(), bundle, TEST_MENU_NAME);
+        var testMenu = JMenuItemBundled.of(new JMenu(), bundle, WINDOWS_MENU_NAME);
         testMenu.getItem().setMnemonic(KeyEvent.VK_T);
 
         var addLogMessageItem = JMenuItemBundled.of(new JMenuItem(), bundle, TEST_LOG_BUTTON_NAME);
         addLogMessageItem.getItem().addActionListener((event) -> Logger.debug("Новая строка"));
 
-        var switchLogMenuVisibleItem = JMenuItemBundled.of(new JMenuItem(), bundle, SWITCHER_NAME);
+        var switchLogMenuVisibleItem = JMenuItemBundled.of(new JMenuItem(), bundle, LOG_SWITCHER_NAME);
         switchLogMenuVisibleItem.getItem().addActionListener((event) -> {
             var logWindow = InternalFramesManager.instance().getFrameInstance(LogWindow.class);
             logWindow.setVisible(!logWindow.isVisible());
         });
 
+        var switchGameWindowVisibleItem = JMenuItemBundled.of(new JMenuItem(), bundle, GAME_SWITCHER_NAME);
+        switchGameWindowVisibleItem.getItem().addActionListener((event) -> {
+            var gameWindow = InternalFramesManager.instance().getFrameInstance(GameWindow.class);
+            gameWindow.setVisible(!gameWindow.isVisible());
+        });
+
         testMenu.add(switchLogMenuVisibleItem);
         testMenu.add(addLogMessageItem);
+        testMenu.add(switchGameWindowVisibleItem);
 
         ObservableLocalization.instance().addListeners(testMenu, switchLogMenuVisibleItem, addLogMessageItem);
 

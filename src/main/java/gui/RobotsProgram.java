@@ -1,9 +1,9 @@
 package gui;
 
 import utility.ObservableLocalization;
+import utility.storage.StorableController;
 
 import java.awt.Frame;
-import java.util.Locale;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -18,7 +18,8 @@ public class RobotsProgram {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ObservableLocalization.instance().changeLocale(Locale.getDefault());
+
+        ObservableLocalization.instance().changeLocale(StorableController.instance().loadLocale());
 
         SwingUtilities.invokeLater(() -> {
             MainApplicationFrame frame = new MainApplicationFrame(ObservableLocalization.instance().getBundle());
