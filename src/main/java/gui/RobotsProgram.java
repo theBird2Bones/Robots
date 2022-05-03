@@ -1,6 +1,7 @@
 package gui;
 
 import localizer.LocalizationManager;
+import utility.MapGenerator;
 import utility.ObservableLocalization;
 import utility.storage.StorableController;
 
