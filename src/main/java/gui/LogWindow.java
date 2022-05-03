@@ -6,17 +6,15 @@ import java.awt.TextArea;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
 
-public class LogWindow extends JInternalFrameWithCustomClose implements LogChangeListener {
-  private final LogWindowSource logSource;
-  private final TextArea logContent;
+public class LogWindow extends JInternalFrameExtended implements LogChangeListener {
+    private final LogWindowSource logSource;
+    private final TextArea logContent;
 
   public LogWindow(LogWindowSource logSource, ResourceBundle bundle) {
     super(
@@ -25,7 +23,7 @@ public class LogWindow extends JInternalFrameWithCustomClose implements LogChang
     this.logSource = logSource;
     this.logSource.registerListener(this);
     logContent = new TextArea("");
-    logContent.setSize(200, 500);
+    logContent.setSize(getSize());
 
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(logContent, BorderLayout.CENTER);
