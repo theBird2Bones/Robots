@@ -5,6 +5,7 @@ import gui.StateLoadingFrame;
 import lombok.Getter;
 import utility.ObservableLocalization;
 
+import java.beans.PropertyVetoException;
 import java.util.*;
 
 
@@ -32,11 +33,11 @@ public class StorableController {
         return instance;
     }
 
-    public void openConfigIO(){
+    public void openConfigIO() {
         configIO.openFile();
     }
 
-    public void closeConfigIO(){
+    public void closeConfigIO() {
         configIO.close();
     }
 
@@ -47,7 +48,7 @@ public class StorableController {
         );
     }
 
-    public Locale loadLocale(){
+    public Locale loadLocale() {
         return configIO.loadLocale();
     }
 
@@ -55,15 +56,21 @@ public class StorableController {
         askAboutLoading();
 
         StorableData data = isLoading ? configIO.loadFrameState(frame.getClass()) : StorableData.defaultValue(frame);
-        frame.setLocation(data.position);
-        frame.setVisible(data.isVisible);
+        try {
+            frame.setLocation(data.position);
+            frame.setSize(data.size);
+            frame.setVisible(data.isVisible);
+            frame.setMaximum(data.isMaximum);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addListener(JInternalFrameExtended inst) {
         listeners.add(inst);
     }
 
-    public void askAboutLoading(){
+    public void askAboutLoading() {
         if (isLoading == null) {
             synchronized (syncObj) {
                 if (isLoading == null) {

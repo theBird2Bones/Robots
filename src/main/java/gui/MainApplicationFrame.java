@@ -57,8 +57,6 @@ public class MainApplicationFrame extends JFrameExtended {
     protected LogWindow createLogWindow(ResourceBundle bundle) {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
 
-        logWindow.setSize(300, 800);
-        setMinimumSize(logWindow.getSize());
         logWindow.pack();
 
         Logger.debug("Протокол работает");
@@ -66,9 +64,7 @@ public class MainApplicationFrame extends JFrameExtended {
     }
 
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle, new Dimension(500, 500));
-
-        gameWindow.setMinimumSize(gameWindow.getSize());
+        GameWindow gameWindow = new GameWindow(bundle);
 
         return gameWindow;
     }
