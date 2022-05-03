@@ -2,11 +2,8 @@ package gui.visualizers;
 
 import lombok.Getter;
 import objects.entities.Player;
-import objects.tiles.DirtTile;
 import objects.tiles.PassableTile;
-import objects.tiles.StoneTile;
 import objects.tiles.Tile;
-import utility.MapCreator;
 import utility.MapGenerator;
 
 import javax.swing.*;
@@ -16,116 +13,145 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.sql.Array;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GamePanel extends JPanel {
-    private final ArenaPainter arenaPainter;
-    private final Timer timer = initTimer();
+  private final ArenaPainter arenaPainter;
+  private final Timer timer = initTimer();
 
-    private MapCreator mapCreator;
+  private MapGenerator mapCreator;
 
-    @Getter
-    private Tile[][] map;
+  @Getter private Tile[][] map;
 
-    @Getter
-    private Map<Point2D, Rectangle> pointToRectangle;
+  @Getter private Map<Point2D, Rectangle> pointToRectangle;
 
-    @Getter
-    private Player player;
+  @Getter private Player player;
 
-    private static Timer initTimer() {
-        return new Timer("game paint event generator", true);
-    }
+  private static Timer initTimer() {
+    return new Timer("game paint event generator", true);
+  }
 
-    public GamePanel(Dimension d) {
-        setSize(d);
-        setBackground(Color.black);
-        var pack =MapGenerator.generate();
-        map = pack.getFirst();
-        var route = pack.getSecond();
-        mapCreator = new MapCreator(this);
-        pointToRectangle = mapCreator.generatePointToRectangle();
-        player = new Player(findAvailablePoint());
-        new Thread(() -> {
-            try {
-                while(true){
-                    for(var e: route){
-                        player.move( e.getFirst(),e.getSecond());
-                        Thread.sleep(100);
+  public GamePanel(Dimension d) {
+    setSize(d);
+    setBackground(Color.black);
+    map = MapGenerator.generate();
+    mapCreator = new MapGenerator(this);
+    pointToRectangle = mapCreator.generatePointToRectangle();
+    player = new Player(findAvailablePoint());
+    player.setPath(Player.createRoute(player, map));
+    player.setWork(
+        new Thread(
+            () -> {
+              try {
+                while (true) {
+                  var prev = player.getPath().get(0);
+                  for (var e : player.getPath().stream().skip(1).toList()) {
+                    for (int i = 0; i < 100; ++i) {
+                      player.setFactPosition(
+                          new Point2D.Double(
+                              prev.x + (e.x - prev.x) / 100d * i,
+                              prev.y + (e.y - prev.y) / 100d * i));
+                      Thread.sleep(4);
                     }
+                    player.setPosition(e);
+                    prev = e;
+                  }
                 }
-            } catch (InterruptedException e) {
+              } catch (InterruptedException e) {
                 System.out.println("oh my");
-            }
-        }).start();
+              }
+            }));
 
-        arenaPainter = new ArenaPainter(this);
+    arenaPainter = new ArenaPainter(this);
+    player.start();
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(!isFocusable()){
-                    requestFocusInWindow();
-                }
-                onRedrawEvent();
+    timer.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            if (!isFocusable()) {
+              requestFocusInWindow();
             }
-        }, 0, 50);
+            onRedrawEvent();
+          }
+        },
+        0,
+        50);
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                requestFocusInWindow();
-            }
+    addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            requestFocusInWindow();
+          }
         });
 
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == 76) {
-                    map = MapGenerator.generate().getFirst();
-                    pointToRectangle = mapCreator.generatePointToRectangle();
-                    player.setPosition(findAvailablePoint());
+    addKeyListener(
+        new KeyAdapter() {
+          @Override
+          public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_L) {
+              player.stop();
+              map = MapGenerator.generate();
+              player.setPath(Player.createRoute(player, map));
+              pointToRectangle = mapCreator.generatePointToRectangle();
+              player.setPosition(findAvailablePoint());
 
-                    arenaPainter.updateBackground();
-                    onRedrawEvent();
-                } else if (e.getKeyCode() == 87) {
-                    player.move(0, -1);
-                } else if (e.getKeyCode() == 65) {
-                    player.move(-1, 0);
-                } else if (e.getKeyCode() == 83) {
-                    player.move(0, 1);
-                } else if (e.getKeyCode() == 68) {
-                    player.move(1, 0);
-                }
+              arenaPainter.updateBackground();
+              player.setWork(
+                  new Thread(
+                      () -> {
+                        try {
+                          while (true) {
+                            var prev = player.getPath().get(0);
+                            for (var t1 : player.getPath().stream().skip(1).toList()) {
+                              for (int i = 0; i < 100; ++i) {
+                                player.setFactPosition(
+                                    new Point2D.Double(
+                                        prev.x + (t1.x - prev.x) / 100d * i,
+                                        prev.y + (t1.y - prev.y) / 100d * i));
+                                Thread.sleep(4);
+                              }
+                              player.setPosition(t1);
+                              prev = t1;
+                            }
+                          }
+                        } catch (InterruptedException t1) {
+                          System.out.println("oh my");
+                        }
+                      }));
+
+              player.start();
+              onRedrawEvent();
             }
+          }
         });
-    }
+  }
 
-    private Point findAvailablePoint() {
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[0].length; y++) {
-                if (map[x][y] instanceof PassableTile) {
-                    return new Point(x, y);
-                }
-            }
+  private Point findAvailablePoint() {
+    for (int x = 0; x < map.length; x++) {
+      for (int y = 0; y < map[0].length; y++) {
+        if (map[x][y] instanceof PassableTile) {
+          return new Point(y, x);
         }
-        return new Point(0, 0);
+      }
     }
+    return new Point(0, 0);
+  }
 
-    protected void onRedrawEvent() {
-        EventQueue.invokeLater(this::repaint);
-    }
+  protected void onRedrawEvent() {
+    EventQueue.invokeLater(this::repaint);
+  }
 
-    public Dimension getMapSize() {
-        return new Dimension(map.length, map[0].length);
-    }
+  public Dimension getMapSize() {
+    return new Dimension(map.length, map[0].length);
+  }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        arenaPainter.paint((Graphics2D) g);
-    }
+  @Override
+  public void paint(Graphics g) {
+    super.paint(g);
+    arenaPainter.paint((Graphics2D) g);
+  }
 }

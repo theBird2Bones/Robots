@@ -27,4 +27,8 @@ public class PointExtends {
     public static Point mult(Point p, int multX, int multY){
         return new Point(p.x * multX, p.y * multY);
     }
+
+    public static Point2D mult(Point2D p, int multX, int multY){
+        return new Point2D.Double(p.getX() * multX, p.getY() * multY);
+    }
 }

@@ -1,9 +1,12 @@
 package utility;
 
+import gui.visualizers.GamePanel;
 import objects.tiles.DirtTile;
 import objects.tiles.PrecipiceTile;
 import objects.tiles.Tile;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.*;
 
 public class MapGenerator {
@@ -17,8 +20,7 @@ public class MapGenerator {
   private static final int pathWidth = totalWidth - leftOffset - rightOffset;
   private static final int pathHeight = totalHeight - topOffset - bottomOffset;
 
-  private static HashSet<Point> hashedRoute = new HashSet<>();
-  public static Tuple<Tile[][], List<Tuple<Integer, Integer>>> generate() {
+  public static Tile[][] generate() {
     var map = new Tile[totalHeight][totalWidth];
     for (int i = 0; i < totalHeight; i++) {
       for (int j = 0; j < totalWidth; ++j) {
@@ -28,62 +30,22 @@ public class MapGenerator {
 
     for (int j = 0; j < pathWidth; ++j) {
       map[topOffset][j + rightOffset] = new DirtTile();
-      hashedRoute.add(new Point(topOffset, j + rightOffset));
     }
     for (int j = 0; j < pathWidth; ++j) {
       map[topOffset + pathHeight - 1][j + rightOffset] = new DirtTile();
-      hashedRoute.add(new Point(topOffset + pathHeight - 1, j + rightOffset));
     }
 
     for (int i = 0; i < pathHeight; ++i) {
       map[i + topOffset][rightOffset] = new DirtTile();
-      hashedRoute.add(new Point(i + topOffset, rightOffset));
     }
     for (int i = 0; i < pathHeight; ++i) {
       map[i + topOffset][rightOffset + pathWidth - 1] = new DirtTile();
-      hashedRoute.add(new Point(i + topOffset, rightOffset + pathWidth - 1));
     }
     var pointsToBend = generateBends();
     for (var k : pointsToBend.keySet()) {
       bendWay(map, k, pointsToBend.get(k));
     }
-    return new Tuple(map,createRoute(hashedRoute));
-  }
-
-  private static List<Tuple<Integer, Integer>> createRoute(Set<Point> hashed){
-    var res = new LinkedList<Tuple<Integer, Integer>>();
-    var visited = new HashSet<Point>();
-    var start = new Point(topOffset, rightOffset);
-    while(res.size() != hashed.size()){
-      var a = new Point(start.i, start.j+1);
-      if(hashed.contains(a) && !visited.contains(a)){
-        res.add(new Tuple<>(a.i - start.i, a.j - start.j));
-        visited.add(a);
-        start = a;
-        continue;
-      }
-      a = new Point(start.i + 1, start.j());
-      if(hashed.contains(a)  && !visited.contains(a)){
-        res.add(new Tuple<>(a.i - start.i, a.j - start.j));
-        visited.add(a);
-        start = a;
-        continue;
-      }
-      a = new Point(start.i - 1, start.j());
-      if(hashed.contains(a) && !visited.contains(a)){
-        res.add(new Tuple<>(a.i - start.i, a.j - start.j));
-        visited.add(a);
-        start = a;
-        continue;
-      }
-      a = new Point(start.i, start.j() - 1);
-      if(hashed.contains(a) && !visited.contains(a)){
-        res.add(new Tuple<>(a.i - start.i, a.j - start.j));
-        visited.add(a);
-        start = a;
-      }
-    }
-    return res;
+    return map;
   }
 
   private static void bendWay(Tile[][] map, Point start, Point finish) {
@@ -92,26 +54,17 @@ public class MapGenerator {
       if (start.i < finish.i) {
         map[finish.i][finish.j] = new DirtTile();
         map[start.i][start.j] = new PrecipiceTile();
-        hashedRoute.add(new Point(finish.i, finish.j));
-        hashedRoute.remove(new Point(start.i, start.j));
-
         for (int i = start.i + 1; i <= finish.i; ++i) {
           map[i][finish.j - 1] = new DirtTile();
           map[i][finish.j + 1] = new DirtTile();
-          hashedRoute.add(new Point(i, finish.j-1));
-          hashedRoute.add(new Point(i, start.j+1));
         }
       } else {
         map[finish.i][finish.j] = new DirtTile();
         map[start.i][start.j] = new PrecipiceTile();
-        hashedRoute.add(new Point(finish.i, finish.j));
-        hashedRoute.remove(new Point(start.i, start.j));
 
         for (int i = start.i - 1; i >= finish.i; --i) {
           map[i][finish.j - 1] = new DirtTile();
           map[i][finish.j + 1] = new DirtTile();
-          hashedRoute.add(new Point(i, finish.j-1));
-          hashedRoute.add(new Point(i, start.j+1));
         }
       }
     }
@@ -153,5 +106,23 @@ public class MapGenerator {
     |a11 a12|
     |a21 a22|
      */
+  }
+  private GamePanel gamePanel;
+
+  public MapGenerator(GamePanel gamePanel) {
+    this.gamePanel = gamePanel;
+  }
+
+  public Map<Point2D, Rectangle> generatePointToRectangle() {
+    var result = new HashMap<Point2D, Rectangle>();
+    var map = gamePanel.getMap();
+
+    for (int x = 0; x < map.length; x++) {
+      for (int y = 0; y < map[0].length; y++) {
+        var rec = new Rectangle(x * Tile.SIZE, y * Tile.SIZE, Tile.SIZE, Tile.SIZE);
+        result.put(new java.awt.Point(x, y), rec);
+      }
+    }
+    return result;
   }
 }

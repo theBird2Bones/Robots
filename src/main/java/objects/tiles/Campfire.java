@@ -2,9 +2,9 @@ package objects.tiles;
 
 import java.awt.*;
 
-public class DirtTile extends PassableTile {
+public class Campfire extends PassableTile {
   @Override
   public Color getColor() {
-    return new Color(255, 215, 0);
+    return new Color(180, 16, 140);
   }
 }

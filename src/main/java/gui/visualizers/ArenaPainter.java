@@ -54,9 +54,9 @@ public class ArenaPainter {
     }
 
     private void paintPlayer(Graphics2D g2d) {
-        var point = PointExtends.mult(gamePanel.getPlayer().getPosition(), tileWidth, tileHeight);
-        g2d.setColor(Color.red);
-        g2d.drawOval(point.x, point.y, tileWidth / 2, tileHeight / 2);
+        var point = PointExtends.mult(gamePanel.getPlayer().getFactPosition(), tileWidth, tileHeight);
+        g2d.setColor(new Color(96,47,107) );
+        g2d.fillOval((int)point.getX() + tileWidth / 4, (int)point.getY() + tileHeight / 4, tileWidth / 2, tileHeight / 2);
     }
 
     private void paintOnPanel(Graphics2D g2d, BufferedImage backgroundImage) {

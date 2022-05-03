@@ -5,6 +5,7 @@ import lombok.Setter;
 import objects.weapons.Weapon;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public abstract class Entity {
     @Getter
@@ -23,6 +24,10 @@ public abstract class Entity {
     @Getter
     @Setter
     private Point position;
+
+    @Getter
+    @Setter
+    private Point2D factPosition;
     @Getter
     @Setter
     private double direction;
