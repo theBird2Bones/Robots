@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 import java.util.ResourceBundle;
 
 public class JFrameExtended extends JFrame {
-    public JFrameExtended(ResourceBundle bundle){
+    public JFrameExtended(){
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override

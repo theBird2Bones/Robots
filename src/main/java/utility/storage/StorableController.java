@@ -5,10 +5,8 @@ import gui.StateLoadingFrame;
 import lombok.Getter;
 import utility.ObservableLocalization;
 
-import java.io.File;
 import java.util.*;
 
-import static utility.GlobalConst.CONFIG_PATH;
 
 public class StorableController {
     private static volatile StorableController instance = null;
@@ -34,6 +32,14 @@ public class StorableController {
         return instance;
     }
 
+    public void openConfigIO(){
+        configIO.openFile();
+    }
+
+    public void closeConfigIO(){
+        configIO.close();
+    }
+
     public void saveListeners() {
         configIO.writeConfig(
                 ObservableLocalization.instance().getLocale(),
@@ -42,7 +48,7 @@ public class StorableController {
     }
 
     public Locale loadLocale(){
-        return new File(CONFIG_PATH).exists() ? configIO.loadLocale() : Locale.getDefault();
+        return configIO.loadLocale();
     }
 
     public void setUpFrame(JInternalFrameExtended frame) {
@@ -61,7 +67,7 @@ public class StorableController {
         if (isLoading == null) {
             synchronized (syncObj) {
                 if (isLoading == null) {
-                    isLoading = new File(CONFIG_PATH).exists() && StateLoadingFrame.showDialogBox() == 0;
+                    isLoading = configIO.isConfigExist() && StateLoadingFrame.showDialogBox() == 0;
                 }
             }
         }

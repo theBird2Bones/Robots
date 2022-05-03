@@ -3,6 +3,7 @@ package gui;
 import log.Logger;
 import utility.InternalFramesManager;
 import utility.ObservableLocalization;
+import utility.storage.StorableController;
 
 import static localizer.LocalizationKey.*;
 
@@ -17,11 +18,16 @@ import java.util.ResourceBundle;
 public class MainApplicationFrame extends JFrameExtended {
     private final JDesktopPane desktopPane = new JDesktopPane();
 
-    public MainApplicationFrame(ResourceBundle bundle) {
-        super(bundle);
+    public MainApplicationFrame() {
+        super();
+
+        StorableController.instance().openConfigIO();
+        ObservableLocalization.instance().changeLocale(StorableController.instance().loadLocale());
+
+        ResourceBundle bundle = ObservableLocalization.instance().getBundle();
+
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
-
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset,
@@ -40,6 +46,8 @@ public class MainApplicationFrame extends JFrameExtended {
         addWindow(gameWindow);
 
         setJMenuBar(generateMenuBar(bundle));
+
+        StorableController.instance().closeConfigIO();
     }
 
     protected void addWindow(JInternalFrame frame) {

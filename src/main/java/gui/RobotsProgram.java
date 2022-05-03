@@ -20,15 +20,13 @@ public class RobotsProgram {
             e.printStackTrace();
         }
 
-        ObservableLocalization.instance().changeLocale(StorableController.instance().loadLocale());
-
-    SwingUtilities.invokeLater(
-        () -> {
-          MainApplicationFrame frame =
-              new MainApplicationFrame(ObservableLocalization.instance().getBundle());
-          frame.pack();
-          frame.setVisible(true);
-          frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-        });
+        SwingUtilities.invokeLater(
+                () -> {
+                    MainApplicationFrame frame =
+                            new MainApplicationFrame();
+                    frame.pack();
+                    frame.setVisible(true);
+                    frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+                });
     }
 }

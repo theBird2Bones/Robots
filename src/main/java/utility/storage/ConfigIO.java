@@ -9,16 +9,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static utility.GlobalConst.CONFIG_FOLDER_PATH;
-import static utility.GlobalConst.CONFIG_PATH;
-
 public class ConfigIO {
+    private static final String CONFIG_FOLDER_PATH = "data/";
+    private static final String CONFIG_PATH = "data/config.ini";
+
     private static final String LOCALIZATION_SECTION = "Localization";
 
     private static final String LOCAL_FIELD = "local";
     private static final String X_FIELD = "x";
     private static final String Y_FIELD = "y";
     private static final String VISIBLE_FIELD = "visible";
+
+    private Wini wini;
 
     public void writeConfig(Locale local, List<StorableData> data) {
         try {
@@ -43,30 +45,43 @@ public class ConfigIO {
     }
 
     public Locale loadLocale() {
-        try {
-            return new Locale(new Wini(new File(CONFIG_PATH)).get(LOCALIZATION_SECTION, LOCAL_FIELD));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Locale.getDefault();
+        return isConfigExist() ?
+                new Locale(wini.get(LOCALIZATION_SECTION, LOCAL_FIELD))
+                : Locale.getDefault();
     }
 
     public StorableData loadFrameState(Class<? extends JInternalFrameExtended> frame) {
-        try {
-            Wini ini = new Wini(new File(CONFIG_PATH));
-            return new StorableData(
-                    frame,
-                    new Point(
-                            ini.get(frame.toString(), X_FIELD, int.class),
-                            ini.get(frame.toString(), Y_FIELD, int.class)
-                    ),
-                    ini.get(frame.toString(), VISIBLE_FIELD, boolean.class)
-            );
+        return new StorableData(
+                frame,
+                new Point(
+                        wini.get(frame.toString(), X_FIELD, int.class),
+                        wini.get(frame.toString(), Y_FIELD, int.class)
+                ),
+                wini.get(frame.toString(), VISIBLE_FIELD, boolean.class)
+        );
+    }
 
+    public void openFile(){
+        try {
+            wini = new Wini(new File(CONFIG_PATH));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return StorableData.defaultValue(frame);
     }
+
+    public void close(){
+        wini = null;
+    }
+
+    public boolean isConfigExist(){
+        return wini != null ? wini.getFile().exists() : new File(CONFIG_PATH).exists();
+    }
+
+    /*public boolean isConfigExist(){
+        return isConfigExist(new File(CONFIG_PATH));
+    }
+
+    public boolean isConfigExist(File file){
+        return file.exists();
+    }*/
 }
