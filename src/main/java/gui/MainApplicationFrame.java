@@ -1,5 +1,8 @@
 package gui;
 
+import gui.innerWindows.GameWindow;
+import gui.innerWindows.LogWindow;
+import localizer.LocalizationKey;
 import log.Logger;
 import utility.InternalFramesManager;
 import utility.ObservableLocalization;
@@ -12,6 +15,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.util.Locale;
+import java.beans.PropertyVetoException;
 import java.util.ResourceBundle;
 
 
@@ -45,9 +49,18 @@ public class MainApplicationFrame extends JFrameExtended {
         InternalFramesManager.instance().registerFrame(gameWindow);
         addWindow(gameWindow);
 
+        try {
+            gameWindow.setMaximum(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        gameWindow.setFocusable(true);
+
         setJMenuBar(generateMenuBar(bundle));
 
         StorableController.instance().closeConfigIO();
+
+        setUndecorated(true);
     }
 
     protected void addWindow(JInternalFrame frame) {
@@ -64,7 +77,11 @@ public class MainApplicationFrame extends JFrameExtended {
     }
 
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle);
+        GameWindow gameWindow = new GameWindow(bundle, getSize());
+//        var size = desktopPane.getSize();
+
+//        gameWindow.setLocation(0, 0);
+//        gameWindow.setMinimumSize(gameWindow.getSize());
 
         return gameWindow;
     }

@@ -1,4 +1,4 @@
-package gui;
+package gui.innerWindows;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
+import gui.JInternalFrameExtended;
 import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;

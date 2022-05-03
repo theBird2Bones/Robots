@@ -1,0 +1,83 @@
+package objects.entities;
+
+import lombok.Getter;
+import lombok.Setter;
+import objects.weapons.Weapon;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+
+public abstract class Entity {
+    @Getter
+    private final int MAX_AP;
+    @Getter
+    private final double MAX_HEALTH;
+    @Getter
+    private final double ATTACK;
+    @Getter
+    private final double DEFENSE;
+    @Getter
+    private final double DAMAGE;
+    @Getter
+    private final double INITIATIVE;
+
+    @Getter
+    @Setter
+    private Point position;
+
+    @Getter
+    @Setter
+    private Point2D factPosition;
+    @Getter
+    @Setter
+    private double direction;
+    private double health;
+    @Getter
+    private int ap;
+
+    private Weapon weapon;
+
+    public Entity(
+            Point position, int maxAp, Weapon weapon,
+            double maxHealth, double attack, double defence, double damage, double initiative
+    ) {
+        MAX_AP = maxAp;
+        MAX_HEALTH = maxHealth;
+        ATTACK = attack;
+        DEFENSE = defence;
+        DAMAGE = damage;
+        INITIATIVE = initiative;
+
+        this.position = position;
+        direction = 0;
+        health = maxHealth;
+        ap = maxAp;
+        this.weapon = weapon;
+    }
+
+    public double getHealth() {
+        return health;
+    }
+
+    public void setHealth(double health) {
+        this.health = health < 0 ? 0 :
+                health > MAX_HEALTH ? MAX_HEALTH : health;
+    }
+
+    public void move(Point dP){
+        move(dP.x, dP.y);
+    }
+
+    public void move(double dx, double dy){
+        position.x += dx;
+        position.y += dy;
+    }
+
+    public void setLocation(Point location){
+        position.setLocation(location);
+    }
+
+    public void setLocation(double x, double y){
+        position.setLocation(x, y);
+    }
+}
