@@ -7,8 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
-import gui.JInternalFrameWithCustomClose;
-import localizer.LocalizationKey;
+import gui.JInternalFrameExtended;
 import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;

@@ -46,9 +46,11 @@ public class ConfigIO {
     }
 
     public Locale loadLocale() {
-        return isConfigExist() ?
+        /*return isConfigExist() ?
                 new Locale(wini.get(LOCALIZATION_SECTION, LOCAL_FIELD))
-                : Locale.getDefault();
+                : Locale.getDefault();*/
+        var local = wini.get(LOCALIZATION_SECTION, LOCAL_FIELD);
+        return local != null ? new Locale(local) : Locale.getDefault();
     }
 
     public StorableData loadFrameState(Class<? extends JInternalFrameExtended> frame) {

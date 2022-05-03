@@ -77,7 +77,7 @@ public class MainApplicationFrame extends JFrameExtended {
     }
 
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle);
+        GameWindow gameWindow = new GameWindow(bundle, getSize());
 //        var size = desktopPane.getSize();
 
 //        gameWindow.setLocation(0, 0);
