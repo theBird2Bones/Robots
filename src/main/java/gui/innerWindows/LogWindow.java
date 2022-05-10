@@ -14,13 +14,11 @@ import log.LogEntry;
 import log.LogWindowSource;
 
 public class LogWindow extends JInternalFrameExtended implements LogChangeListener {
-    private final LogWindowSource logSource;
-    private final TextArea logContent;
+    protected final LogWindowSource logSource;
+    protected final TextArea logContent;
 
   public LogWindow(LogWindowSource logSource, ResourceBundle bundle) {
-    super(
-        bundle, bundle.getString(LocalizationKey.LOG_WINDOW_NAME.value()), true, true, true, true);
-
+    super(bundle, bundle.getString(LocalizationKey.LOG_WINDOW_NAME.value()), true, true, true, true);
     this.logSource = logSource;
     this.logSource.registerListener(this);
     logContent = new TextArea("");
@@ -34,7 +32,7 @@ public class LogWindow extends JInternalFrameExtended implements LogChangeListen
     updateLogContent();
   }
 
-  private void updateLogContent() {
+  protected void updateLogContent() {
     StringBuilder content = new StringBuilder();
     for (LogEntry entry : logSource.all()) {
       content.append(entry.getMessage()).append("\n");

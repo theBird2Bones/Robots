@@ -1,5 +1,6 @@
 package objects.entities;
 
+import gui.innerWindows.CoordinatingWindow;
 import lombok.Getter;
 import lombok.Setter;
 import objects.tiles.PassableTile;
@@ -7,6 +8,7 @@ import objects.tiles.Tile;
 import objects.weapons.Weapon;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,20 +16,9 @@ import java.util.List;
 
 public class Player extends Entity {
   @Getter @Setter private List<Point> path;
+  @Getter @Setter private CoordinatingWindow coordinatingWindow;
 
   @Setter private Thread work;
-
-  public Player(Point position) {
-    super(position, 0, new Weapon(), 0, 0, 0, 0, 0);
-  }
-
-  public void start() {
-    work.start();
-  }
-
-  public void stop() {
-    work.stop();
-  }
 
   public static List<Point> createRoute(Player player, Tile[][] map) {
     var i = player.getPosition().y;
@@ -60,5 +51,23 @@ public class Player extends Entity {
       }
     }
     return res.stream().map(p -> new Point(p.y, p.x)).toList();
+  }
+
+  public Player(Point position) {
+    super(position, 0, new Weapon(), 0, 0, 0, 0, 0);
+  }
+
+  public void start() {
+    work.start();
+  }
+
+  public void stop() {
+    work.stop();
+  }
+
+  public void log(Point nextPosition){
+    if(coordinatingWindow != null){
+      coordinatingWindow.updateLogContent(this, nextPosition);
+    }
   }
 }

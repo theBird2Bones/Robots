@@ -1,9 +1,11 @@
 package gui;
 
+import gui.innerWindows.CoordinatingWindow;
 import gui.innerWindows.GameWindow;
 import gui.innerWindows.LogWindow;
 import localizer.LocalizationKey;
 import log.Logger;
+import lombok.Getter;
 import utility.InternalFramesManager;
 import utility.ObservableLocalization;
 import utility.storage.StorableController;
@@ -20,7 +22,8 @@ import java.util.ResourceBundle;
 
 
 public class MainApplicationFrame extends JFrameExtended {
-    private final JDesktopPane desktopPane = new JDesktopPane();
+    @Getter
+    private static final JDesktopPane desktopPane = new JDesktopPane();
 
     public MainApplicationFrame() {
         super();

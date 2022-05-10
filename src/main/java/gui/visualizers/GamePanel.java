@@ -1,10 +1,13 @@
 package gui.visualizers;
 
+import gui.MainApplicationFrame;
+import gui.innerWindows.CoordinatingWindow;
 import lombok.Getter;
 import objects.entities.Player;
 import objects.tiles.PassableTile;
 import objects.tiles.Tile;
 import utility.MapGenerator;
+import utility.ObservableLocalization;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,6 +43,9 @@ public class GamePanel extends JPanel {
     mapCreator = new MapGenerator(this);
     pointToRectangle = mapCreator.generatePointToRectangle();
     player = new Player(findAvailablePoint());
+    var coordWindow = new CoordinatingWindow(ObservableLocalization.instance().getBundle());
+    MainApplicationFrame.getDesktopPane().add(coordWindow);
+    player.setCoordinatingWindow(coordWindow);
     player.setPath(Player.createRoute(player, map));
     player.setWork(
         new Thread(
@@ -48,6 +54,7 @@ public class GamePanel extends JPanel {
                 while (true) {
                   var prev = player.getPath().get(0);
                   for (var e : player.getPath().stream().skip(1).toList()) {
+                    player.log(e);
                     for (int i = 0; i < 100; ++i) {
                       player.setFactPosition(
                           new Point2D.Double(
