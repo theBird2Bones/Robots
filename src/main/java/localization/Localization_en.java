@@ -15,6 +15,7 @@ public class Localization_en extends ListResourceBundle {
       {SYSTEM_SCHEME_NAME.value(), "System scheme"},
       {LOG_SWITCHER_NAME.value(), "Turn on/off log window"},
       {GAME_SWITCHER_NAME.value(), "Turn on/off game window"},
+      {COORDINATING_WINDOW_SWITCHER_NAME.value(), "Turn on/off coordinating window"},
       {TEST_LOG_BUTTON_NAME.value(), "Message in log"},
       {COORDINATING_WINDOW_NAME.value(), "Robot's coordinates"},
       {GAME_WINDOW_NAME.value(), "Game window"},

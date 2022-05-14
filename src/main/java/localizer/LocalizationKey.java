@@ -10,6 +10,7 @@ public enum LocalizationKey {
 
   LOG_SWITCHER_NAME("logSwitcherName"),
   GAME_SWITCHER_NAME("gameSwitcherName"),
+  COORDINATING_WINDOW_SWITCHER_NAME("coordinatingWindowSwitcherName"),
   TEST_LOG_BUTTON_NAME("testLogButtonName"),
 
   COORDINATING_WINDOW_NAME("coordinatingWindowName"),

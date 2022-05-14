@@ -14,6 +14,7 @@ public class Localization_ru extends ListResourceBundle {
       {UNIVERSAL_SCHEME_NAME.value(), "Универсальная схема"},
       {SYSTEM_SCHEME_NAME.value(), "Системная схема"},
       {LOG_SWITCHER_NAME.value(), "Вкл / Выкл окно логов"},
+      {COORDINATING_WINDOW_SWITCHER_NAME.value(), "Вкл / Выкл окно координат"},
       {GAME_SWITCHER_NAME.value(), "Вкл / Выкл окно игры"},
       {TEST_LOG_BUTTON_NAME.value(), "Сообщение в лог"},
       {GAME_WINDOW_NAME.value(), "Меню игры"},
