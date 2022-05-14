@@ -12,8 +12,9 @@ import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
+import utility.ChangingLanguage;
 
-public class LogWindow extends JInternalFrameExtended implements LogChangeListener {
+public class LogWindow extends JInternalFrameExtended implements LogChangeListener, ChangingLanguage {
     protected final LogWindowSource logSource;
     protected final TextArea logContent;
 
@@ -44,5 +45,10 @@ public class LogWindow extends JInternalFrameExtended implements LogChangeListen
   @Override
   public void onLogChanged() {
     EventQueue.invokeLater(this::updateLogContent);
+  }
+
+  @Override
+  public void changeLanguageWith(ResourceBundle bundle) {
+    this.title = bundle.getString(LocalizationKey.COORDINATING_WINDOW_NAME.value());
   }
 }

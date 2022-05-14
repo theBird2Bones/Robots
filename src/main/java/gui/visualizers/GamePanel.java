@@ -6,6 +6,7 @@ import lombok.Getter;
 import objects.entities.Player;
 import objects.tiles.PassableTile;
 import objects.tiles.Tile;
+import utility.InternalFramesManager;
 import utility.MapGenerator;
 import utility.ObservableLocalization;
 
@@ -43,16 +44,28 @@ public class GamePanel extends JPanel {
     mapCreator = new MapGenerator(this);
     pointToRectangle = mapCreator.generatePointToRectangle();
     player = new Player(findAvailablePoint());
-    var coordWindow = new CoordinatingWindow(ObservableLocalization.instance().getBundle());
-    MainApplicationFrame.getDesktopPane().add(coordWindow);
-    player.setCoordinatingWindow(coordWindow);
+    player.getPositionListeners().add((InternalFramesManager.instance().getFrameInstance(CoordinatingWindow.class))) ;
     player.setPath(Player.createRoute(player, map));
     player.setWork(
         new Thread(
             () -> {
               try {
+                player.updateNextPosition();
+                var current = player.getNextPosition();
                 while (true) {
-                  var prev = player.getPath().get(0);
+                  player.updateNextPosition();
+                  var nextPos = player.getNextPosition();
+                  player.notifyPosition();
+                  for (int i = 0; i < 100; ++i) {
+                    player.setFactPosition(
+                        new Point2D.Double(
+                            current.x + (nextPos.x - current.x) / 100d * i,
+                            current.y + (nextPos.y - current.y) / 100d * i));
+                    Thread.sleep(4);
+                  }
+                  current = nextPos;
+/*
+                  var prev = player.getNextPosition();
                   for (var e : player.getPath().stream().skip(1).toList()) {
                     player.log(e);
                     for (int i = 0; i < 100; ++i) {
@@ -65,6 +78,7 @@ public class GamePanel extends JPanel {
                     player.setPosition(e);
                     prev = e;
                   }
+*/
                 }
               } catch (InterruptedException e) {
                 System.out.println("oh my");
@@ -99,6 +113,7 @@ public class GamePanel extends JPanel {
         new KeyAdapter() {
           @Override
           public void keyPressed(KeyEvent e) {
+/*
             if (e.getKeyCode() == KeyEvent.VK_L) {
               player.stop();
               map = MapGenerator.generate();
@@ -133,6 +148,7 @@ public class GamePanel extends JPanel {
               player.start();
               onRedrawEvent();
             }
+*/
           }
         });
   }
