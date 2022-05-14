@@ -1,8 +1,8 @@
 package gui;
 
+import gui.innerWindows.CoordinatingWindow;
 import gui.innerWindows.GameWindow;
 import gui.innerWindows.LogWindow;
-import localizer.LocalizationKey;
 import log.Logger;
 import utility.InternalFramesManager;
 import utility.ObservableLocalization;
@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 
 public class MainApplicationFrame extends JFrameExtended {
-    private final JDesktopPane desktopPane = new JDesktopPane();
+    private static final JDesktopPane desktopPane = new JDesktopPane();
 
     public MainApplicationFrame() {
         super();
@@ -40,10 +40,16 @@ public class MainApplicationFrame extends JFrameExtended {
 
         setContentPane(desktopPane);
 
+        var coordinatingWindow = createCoordinatingWindow(bundle);
+        InternalFramesManager.instance().registerFrame(coordinatingWindow);
+        addWindow(coordinatingWindow);
+        ObservableLocalization.instance().addListener(coordinatingWindow);
+
         var logWindow = createLogWindow(bundle);
         InternalFramesManager.instance().registerFrame(logWindow);
 
         addWindow(logWindow);
+        ObservableLocalization.instance().addListener(logWindow);
 
         var gameWindow = createGameWindow(bundle);
         InternalFramesManager.instance().registerFrame(gameWindow);
@@ -76,14 +82,14 @@ public class MainApplicationFrame extends JFrameExtended {
         return logWindow;
     }
 
+    protected CoordinatingWindow createCoordinatingWindow(ResourceBundle bundle) {
+        CoordinatingWindow window = new CoordinatingWindow(bundle);
+        window.pack();
+        return window;
+    }
+
     protected GameWindow createGameWindow(ResourceBundle bundle) {
-        GameWindow gameWindow = new GameWindow(bundle, getSize());
-//        var size = desktopPane.getSize();
-
-//        gameWindow.setLocation(0, 0);
-//        gameWindow.setMinimumSize(gameWindow.getSize());
-
-        return gameWindow;
+        return new GameWindow(bundle, getSize());
     }
 
     private JMenuBar generateMenuBar(ResourceBundle bundle) {
@@ -180,11 +186,22 @@ public class MainApplicationFrame extends JFrameExtended {
             gameWindow.setVisible(!gameWindow.isVisible());
         });
 
+        var switchCoordinationWindowVisibleItem = new JMenuItemBundled(bundle, COORDINATING_WINDOW_SWITCHER_NAME);
+        switchGameWindowVisibleItem.addActionListener((event) -> {
+            var coordWindow = InternalFramesManager.instance().getFrameInstance(CoordinatingWindow.class);
+            coordWindow.setVisible(!coordWindow.isVisible());
+        });
+
         testMenu.add(switchLogMenuVisibleItem);
         testMenu.add(addLogMessageItem);
         testMenu.add(switchGameWindowVisibleItem);
+        testMenu.add(switchCoordinationWindowVisibleItem);
 
-        ObservableLocalization.instance().addListeners(testMenu, switchLogMenuVisibleItem, addLogMessageItem);
+        ObservableLocalization.instance().addListeners(testMenu,
+            switchLogMenuVisibleItem,
+            switchCoordinationWindowVisibleItem,
+            addLogMessageItem,
+            switchGameWindowVisibleItem);
 
         return testMenu;
     }

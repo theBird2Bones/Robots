@@ -1,5 +1,8 @@
 package objects.entities;
 
+import PositionObserver.PositionListener;
+import PositionObserver.PositionNotifier;
+import gui.innerWindows.CoordinatingWindow;
 import lombok.Getter;
 import lombok.Setter;
 import objects.tiles.PassableTile;
@@ -7,26 +10,21 @@ import objects.tiles.Tile;
 import objects.weapons.Weapon;
 
 import java.awt.Point;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.awt.geom.Point2D;
+import java.util.*;
 
-public class Player extends Entity {
-  @Getter @Setter private List<Point> path;
+public class Player extends Entity implements PositionNotifier {
+  @Setter private List<Point> path;
+  private Iterator<Point> pathIterator;
+  private Point nextPosition;
+
+  @Getter @Setter private CoordinatingWindow coordinatingWindow;
+  @Getter @Setter private List<PositionListener> positionListeners = new LinkedList<>();
 
   @Setter private Thread work;
 
   public Player(Point position) {
     super(position, 0, new Weapon(), 0, 0, 0, 0, 0);
-  }
-
-  public void start() {
-    work.start();
-  }
-
-  public void stop() {
-    work.stop();
   }
 
   public static List<Point> createRoute(Player player, Tile[][] map) {
@@ -60,5 +58,36 @@ public class Player extends Entity {
       }
     }
     return res.stream().map(p -> new Point(p.y, p.x)).toList();
+  }
+
+  public void updateNextPosition(){
+    if(pathIterator == null || !pathIterator.hasNext()){
+      pathIterator = path.iterator();
+    }
+    setPosition(nextPosition);
+    nextPosition = pathIterator.next();
+  }
+
+  public Point getNextPosition(){
+    if (nextPosition == null){
+      updateNextPosition();
+    }
+    return nextPosition;
+  }
+
+
+  public void start() {
+    work.start();
+  }
+
+  public void stop() {
+    work.stop();
+  }
+
+  @Override
+  public void notifyPosition() {
+    for(var l: positionListeners){
+      l.update(this.getPosition(), this.getNextPosition());
+    }
   }
 }

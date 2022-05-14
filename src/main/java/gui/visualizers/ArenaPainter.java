@@ -1,9 +1,5 @@
 package gui.visualizers;
 
-import objects.tiles.DirtTile;
-import objects.tiles.PrecipiceTile;
-import objects.tiles.StoneTile;
-import objects.tiles.Tile;
 import utility.PointExtends;
 import utility.consts.GlobalConst;
 
