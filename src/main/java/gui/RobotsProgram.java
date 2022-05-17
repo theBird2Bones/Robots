@@ -1,10 +1,5 @@
 package gui;
 
-import localizer.LocalizationManager;
-import utility.MapGenerator;
-import utility.ObservableLocalization;
-import utility.storage.StorableController;
-
 import java.awt.Frame;
 
 import javax.swing.SwingUtilities;

@@ -90,4 +90,9 @@ public class Player extends Entity implements PositionNotifier {
       l.update(this.getPosition(), this.getNextPosition());
     }
   }
+
+  @Override
+  public void subscribe(PositionListener listener) {
+    positionListeners.add(listener);
+  }
 }
