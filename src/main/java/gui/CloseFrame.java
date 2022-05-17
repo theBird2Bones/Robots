@@ -1,13 +1,11 @@
 package gui;
 
 import utility.InternalFramesManager;
-import localizer.LocalizationKey;
-import utility.ObservableLocalization;
+import localizer.ObservableLocalization;
 import utility.storage.StorableController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ResourceBundle;
 
 import static localizer.LocalizationKey.*;
 

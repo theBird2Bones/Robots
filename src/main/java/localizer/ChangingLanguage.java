@@ -1,4 +1,4 @@
-package utility;
+package localizer;
 
 import java.util.ResourceBundle;
 

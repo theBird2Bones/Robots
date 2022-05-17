@@ -3,7 +3,7 @@ package utility.storage;
 import gui.JInternalFrameExtended;
 import gui.StateLoadingFrame;
 import lombok.Getter;
-import utility.ObservableLocalization;
+import localizer.ObservableLocalization;
 
 import java.beans.PropertyVetoException;
 import java.util.*;

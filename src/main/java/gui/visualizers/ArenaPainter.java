@@ -1,5 +1,7 @@
 package gui.visualizers;
 
+import objects.tiles.PassableTile;
+import objects.tiles.Tile;
 import utility.PointExtends;
 import utility.consts.GlobalConst;
 
@@ -7,8 +9,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ArenaPainter {
-    private final int tileWidth = GlobalConst.TILE_SIZE;
-    private final int tileHeight = GlobalConst.TILE_SIZE;
+    private final int tileWidth = Tile.SIZE;
+    private final int tileHeight = Tile.SIZE;
 
     private GamePanel gamePanel;
     private BufferedImage backgroundImage;
@@ -34,6 +36,7 @@ public class ArenaPainter {
             backgroundImage = copyBufferedImage(this.backgroundImage);
         }
         var bgG2d = backgroundImage.createGraphics();
+        paintEnemies(bgG2d);
         paintPlayer(bgG2d);
 
         paintOnPanel(g2d, backgroundImage);
@@ -50,9 +53,25 @@ public class ArenaPainter {
     }
 
     private void paintPlayer(Graphics2D g2d) {
-        var point = PointExtends.mult(gamePanel.getPlayer().getFactPosition(), tileWidth, tileHeight);
+        var point = PointExtends.mult(gamePanel.getPlayer().getPosition(), tileWidth, tileHeight);
         g2d.setColor(new Color(96,47,107) );
         g2d.fillOval((int)point.getX() + tileWidth / 4, (int)point.getY() + tileHeight / 4, tileWidth / 2, tileHeight / 2);
+    }
+
+    private void paintEnemies(Graphics2D g2d){
+        for(var l: gamePanel.getMap()){
+            for(var tile: l){
+                if(tile instanceof PassableTile){
+                    var ptile = (PassableTile) tile;
+                    for(var enemy: ptile.getEnemies()){
+                        var point = PointExtends.mult(ptile.getPosition(), tileWidth, tileHeight);
+                        g2d.setColor(new Color(64, 180, 23) );
+                        g2d.fillOval((int)point.getX() + tileWidth / 4, (int)point.getY() + tileHeight / 4, tileWidth / 2, tileHeight / 2);
+                    }
+                }
+            }
+        }
+
     }
 
     private void paintOnPanel(Graphics2D g2d, BufferedImage backgroundImage) {

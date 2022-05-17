@@ -3,218 +3,223 @@ package gui;
 import gui.innerWindows.CoordinatingWindow;
 import gui.innerWindows.GameWindow;
 import gui.innerWindows.LogWindow;
+import localizer.ObservableLocalization;
 import log.Logger;
+import lombok.Getter;
 import utility.InternalFramesManager;
-import utility.ObservableLocalization;
 import utility.storage.StorableController;
-
-import static localizer.LocalizationKey.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-
-import java.util.Locale;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static localizer.LocalizationKey.*;
 
 public class MainApplicationFrame extends JFrameExtended {
-    private static final JDesktopPane desktopPane = new JDesktopPane();
+  @Getter private static final JDesktopPane desktopPane = new JDesktopPane();
 
-    public MainApplicationFrame() {
-        super();
+  public MainApplicationFrame() {
+    super();
 
-        StorableController.instance().openConfigIO();
-        ObservableLocalization.instance().changeLocale(StorableController.instance().loadLocale());
+    StorableController.instance().openConfigIO();
+    ObservableLocalization.instance().changeLocale(StorableController.instance().loadLocale());
 
-        ResourceBundle bundle = ObservableLocalization.instance().getBundle();
+    ResourceBundle bundle = ObservableLocalization.instance().getBundle();
 
-        // Make the big window be indented 50 pixels from each edge
-        // of the screen.
-        int inset = 50;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(inset, inset,
-                screenSize.width - inset * 2,
-                screenSize.height - inset * 2);
+    // Make the big window be indented 50 pixels from each edge
+    // of the screen.
+    int inset = 50;
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
 
-        setContentPane(desktopPane);
+    setContentPane(desktopPane);
 
-        var coordinatingWindow = createCoordinatingWindow(bundle);
-        InternalFramesManager.instance().registerFrame(coordinatingWindow);
-        addWindow(coordinatingWindow);
-        ObservableLocalization.instance().addListener(coordinatingWindow);
+    var coordinatingWindow = createCoordinatingWindow(bundle);
+    InternalFramesManager.instance().registerFrame(coordinatingWindow);
+    addWindow(coordinatingWindow);
+    ObservableLocalization.instance().addListener(coordinatingWindow);
 
-        var logWindow = createLogWindow(bundle);
-        InternalFramesManager.instance().registerFrame(logWindow);
+/*
+    var logWindow = createLogWindow(bundle);
+    InternalFramesManager.instance().registerFrame(logWindow);
 
-        addWindow(logWindow);
-        ObservableLocalization.instance().addListener(logWindow);
+    addWindow(logWindow);
+    ObservableLocalization.instance().addListener(logWindow);
 
-        var gameWindow = createGameWindow(bundle);
-        InternalFramesManager.instance().registerFrame(gameWindow);
-        addWindow(gameWindow);
+*/
 
-        try {
-            gameWindow.setMaximum(true);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-        gameWindow.setFocusable(true);
+    var gameWindow = createGameWindow(bundle);
+    InternalFramesManager.instance().registerFrame(gameWindow);
+    addWindow(gameWindow);
 
-        setJMenuBar(generateMenuBar(bundle));
-
-        StorableController.instance().closeConfigIO();
-
-        setUndecorated(true);
+    try {
+      gameWindow.setMaximum(true);
+    } catch (PropertyVetoException e) {
+      e.printStackTrace();
     }
+    gameWindow.setFocusable(true);
 
-    protected void addWindow(JInternalFrame frame) {
-        desktopPane.add(frame);
-    }
+    setJMenuBar(generateMenuBar(bundle));
 
-    protected LogWindow createLogWindow(ResourceBundle bundle) {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
+    StorableController.instance().closeConfigIO();
 
-        logWindow.pack();
+    setUndecorated(true);
+  }
 
-        Logger.debug("Протокол работает");
-        return logWindow;
-    }
+  public static void addWindow(JInternalFrame frame) {
+    desktopPane.add(frame);
+  }
 
-    protected CoordinatingWindow createCoordinatingWindow(ResourceBundle bundle) {
-        CoordinatingWindow window = new CoordinatingWindow(bundle);
-        window.pack();
-        return window;
-    }
+  protected LogWindow createLogWindow(ResourceBundle bundle) {
+    LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle);
 
-    protected GameWindow createGameWindow(ResourceBundle bundle) {
-        return new GameWindow(bundle, getSize());
-    }
+    logWindow.pack();
 
-    private JMenuBar generateMenuBar(ResourceBundle bundle) {
-        JMenuBar menuBar = new JMenuBar();
+    return logWindow;
+  }
 
-        menuBar.add(createConfigMenu(bundle));
-        menuBar.add(createLogMenu(bundle));
+  protected CoordinatingWindow createCoordinatingWindow(ResourceBundle bundle) {
+    CoordinatingWindow window = new CoordinatingWindow(bundle);
+    window.pack();
+    return window;
+  }
 
-        return menuBar;
-    }
+  protected GameWindow createGameWindow(ResourceBundle bundle) {
+    return new GameWindow(bundle, getSize());
+  }
 
-    private JMenuItem createConfigMenu(ResourceBundle bundle) {
-        var config = new JMenuBundled(bundle, CONFIG_MENU_NAME);
+  private JMenuBar generateMenuBar(ResourceBundle bundle) {
+    JMenuBar menuBar = new JMenuBar();
 
-        var languageMenu = new JMenuBundled(bundle, LANGUAGE_MENU_TITLE);
+    menuBar.add(createConfigMenu(bundle));
+    menuBar.add(createLogMenu(bundle));
 
-        var englishButton = new JMenuItemBundled(bundle, LANGUAGE_MENU_ENGLISH);
-        englishButton.addActionListener(l -> ObservableLocalization.instance().changeLocale(Locale.ENGLISH));
+    return menuBar;
+  }
 
-        var russianButton = new JMenuItemBundled(bundle, LANGUAGE_MENU_RUSSIAN);
-        russianButton.addActionListener(l -> ObservableLocalization.instance().changeLocale(new Locale("ru")));
+  private JMenuItem createConfigMenu(ResourceBundle bundle) {
+    var config = new JMenuBundled(bundle, CONFIG_MENU_NAME);
 
-        languageMenu.add(englishButton);
-        languageMenu.add(russianButton);
+    var languageMenu = new JMenuBundled(bundle, LANGUAGE_MENU_TITLE);
 
-        var exitButton = new JMenuItemBundled(bundle, EXIT_BUTTON_NAME);
-        exitButton.addActionListener(l -> onCloseAppEvent(this));
+    var englishButton = new JMenuItemBundled(bundle, LANGUAGE_MENU_ENGLISH);
+    englishButton.addActionListener(
+        l -> ObservableLocalization.instance().changeLocale(Locale.ENGLISH));
 
-        config.add(createLookAndFeelMenu(bundle));
-        config.add(languageMenu);
-        config.add(exitButton);
+    var russianButton = new JMenuItemBundled(bundle, LANGUAGE_MENU_RUSSIAN);
+    russianButton.addActionListener(
+        l -> ObservableLocalization.instance().changeLocale(new Locale("ru")));
 
-        ObservableLocalization.instance()
-                .addListeners(config, languageMenu, englishButton, russianButton, exitButton);
+    languageMenu.add(englishButton);
+    languageMenu.add(russianButton);
 
-        return config;
-    }
+    var exitButton = new JMenuItemBundled(bundle, EXIT_BUTTON_NAME);
+    exitButton.addActionListener(l -> onCloseAppEvent(this));
 
-    private JMenuItem createLookAndFeelMenu(ResourceBundle bundle) {
-        var lookAndFeelMenu = new JMenuBundled(bundle, VIEW_MODE_MENU_NAME);
+    config.add(createLookAndFeelMenu(bundle));
+    config.add(languageMenu);
+    config.add(exitButton);
 
-        lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
-        addSystemLookAndFeel(lookAndFeelMenu, bundle);
-        addCrossplatformLookAndFeel(lookAndFeelMenu, bundle);
+    ObservableLocalization.instance()
+        .addListeners(config, languageMenu, englishButton, russianButton, exitButton);
 
-        ObservableLocalization.instance().addListener(lookAndFeelMenu);
-        return lookAndFeelMenu;
-    }
+    return config;
+  }
 
-    private void addSystemLookAndFeel(JMenuItem lookAndFeelMenu, ResourceBundle bundle) {
-        var systemLookAndFeel = new JMenuItemBundled(bundle, SYSTEM_SCHEME_NAME);
+  private JMenuItem createLookAndFeelMenu(ResourceBundle bundle) {
+    var lookAndFeelMenu = new JMenuBundled(bundle, VIEW_MODE_MENU_NAME);
 
-        systemLookAndFeel
-                .addActionListener(
-                        (event) -> {
-                            setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                            this.invalidate();
-                        });
+    lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
+    addSystemLookAndFeel(lookAndFeelMenu, bundle);
+    addCrossplatformLookAndFeel(lookAndFeelMenu, bundle);
 
-        ObservableLocalization.instance().addListener(systemLookAndFeel);
-        lookAndFeelMenu.add(systemLookAndFeel);
-    }
+    ObservableLocalization.instance().addListener(lookAndFeelMenu);
+    return lookAndFeelMenu;
+  }
 
-    private void addCrossplatformLookAndFeel(JMenuItem lookAndFeelMenu, ResourceBundle bundle) {
-        var crossplatformLookAndFeel =
-                new JMenuItemBundled(bundle, UNIVERSAL_SCHEME_NAME);
-        crossplatformLookAndFeel
-                .addActionListener(
-                        (event) -> {
-                            setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                            this.invalidate();
-                        });
+  private void addSystemLookAndFeel(JMenuItem lookAndFeelMenu, ResourceBundle bundle) {
+    var systemLookAndFeel = new JMenuItemBundled(bundle, SYSTEM_SCHEME_NAME);
 
-        ObservableLocalization.instance().addListener(crossplatformLookAndFeel);
-        lookAndFeelMenu.add(crossplatformLookAndFeel);
-    }
-
-    private JMenuItem createLogMenu(ResourceBundle bundle) {
-        var testMenu = new JMenuBundled(bundle, WINDOWS_MENU_NAME);
-        testMenu.setMnemonic(KeyEvent.VK_T);
-
-        var addLogMessageItem = new JMenuItemBundled(bundle, TEST_LOG_BUTTON_NAME);
-        addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
-
-        var switchLogMenuVisibleItem = new JMenuItemBundled(bundle, LOG_SWITCHER_NAME);
-        switchLogMenuVisibleItem.addActionListener((event) -> {
-            var logWindow = InternalFramesManager.instance().getFrameInstance(LogWindow.class);
-            logWindow.setVisible(!logWindow.isVisible());
+    systemLookAndFeel.addActionListener(
+        (event) -> {
+          setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+          this.invalidate();
         });
 
-        var switchGameWindowVisibleItem = new JMenuItemBundled(bundle, GAME_SWITCHER_NAME);
-        switchGameWindowVisibleItem.addActionListener((event) -> {
-            var gameWindow = InternalFramesManager.instance().getFrameInstance(GameWindow.class);
-            gameWindow.setVisible(!gameWindow.isVisible());
+    ObservableLocalization.instance().addListener(systemLookAndFeel);
+    lookAndFeelMenu.add(systemLookAndFeel);
+  }
+
+  private void addCrossplatformLookAndFeel(JMenuItem lookAndFeelMenu, ResourceBundle bundle) {
+    var crossplatformLookAndFeel = new JMenuItemBundled(bundle, UNIVERSAL_SCHEME_NAME);
+    crossplatformLookAndFeel.addActionListener(
+        (event) -> {
+          setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+          this.invalidate();
         });
 
-        var switchCoordinationWindowVisibleItem = new JMenuItemBundled(bundle, COORDINATING_WINDOW_SWITCHER_NAME);
-        switchGameWindowVisibleItem.addActionListener((event) -> {
-            var coordWindow = InternalFramesManager.instance().getFrameInstance(CoordinatingWindow.class);
-            coordWindow.setVisible(!coordWindow.isVisible());
+    ObservableLocalization.instance().addListener(crossplatformLookAndFeel);
+    lookAndFeelMenu.add(crossplatformLookAndFeel);
+  }
+
+  private JMenuItem createLogMenu(ResourceBundle bundle) {
+    var testMenu = new JMenuBundled(bundle, WINDOWS_MENU_NAME);
+    testMenu.setMnemonic(KeyEvent.VK_T);
+
+    var addLogMessageItem = new JMenuItemBundled(bundle, TEST_LOG_BUTTON_NAME);
+    addLogMessageItem.addActionListener((event) -> Logger.debug("Новая строка"));
+
+    var switchLogMenuVisibleItem = new JMenuItemBundled(bundle, LOG_SWITCHER_NAME);
+    switchLogMenuVisibleItem.addActionListener(
+        (event) -> {
+          var logWindow = InternalFramesManager.instance().getFrameInstance(LogWindow.class);
+          logWindow.setVisible(!logWindow.isVisible());
         });
 
-        testMenu.add(switchLogMenuVisibleItem);
-        testMenu.add(addLogMessageItem);
-        testMenu.add(switchGameWindowVisibleItem);
-        testMenu.add(switchCoordinationWindowVisibleItem);
+    var switchGameWindowVisibleItem = new JMenuItemBundled(bundle, GAME_SWITCHER_NAME);
+    switchGameWindowVisibleItem.addActionListener(
+        (event) -> {
+          var gameWindow = InternalFramesManager.instance().getFrameInstance(GameWindow.class);
+          gameWindow.setVisible(!gameWindow.isVisible());
+        });
 
-        ObservableLocalization.instance().addListeners(testMenu,
+    var switchCoordinationWindowVisibleItem =
+        new JMenuItemBundled(bundle, COORDINATING_WINDOW_SWITCHER_NAME);
+    switchGameWindowVisibleItem.addActionListener(
+        (event) -> {
+          var coordWindow =
+              InternalFramesManager.instance().getFrameInstance(CoordinatingWindow.class);
+          coordWindow.setVisible(!coordWindow.isVisible());
+        });
+
+    testMenu.add(switchLogMenuVisibleItem);
+    testMenu.add(addLogMessageItem);
+    testMenu.add(switchGameWindowVisibleItem);
+    testMenu.add(switchCoordinationWindowVisibleItem);
+
+    ObservableLocalization.instance()
+        .addListeners(
+            testMenu,
             switchLogMenuVisibleItem,
             switchCoordinationWindowVisibleItem,
             addLogMessageItem,
             switchGameWindowVisibleItem);
 
-        return testMenu;
-    }
+    return testMenu;
+  }
 
-    private void setLookAndFeel(String className) {
-        try {
-            UIManager.setLookAndFeel(className);
-            SwingUtilities.updateComponentTreeUI(this);
-        } catch (ClassNotFoundException
-                | InstantiationException
-                | IllegalAccessException
-                | UnsupportedLookAndFeelException e) {
-            System.out.println("crushed. setLookAndFeel");
-        }
+  private void setLookAndFeel(String className) {
+    try {
+      UIManager.setLookAndFeel(className);
+      SwingUtilities.updateComponentTreeUI(this);
+    } catch (ClassNotFoundException
+        | InstantiationException
+        | IllegalAccessException
+        | UnsupportedLookAndFeelException e) {
+      System.out.println("crushed. setLookAndFeel");
     }
+  }
 }

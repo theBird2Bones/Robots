@@ -1,7 +1,8 @@
 package objects.entities;
 
-import PositionObserver.PositionListener;
-import PositionObserver.PositionNotifier;
+import motionObserving.MotionListener;
+import positionObserving.PositionListener;
+import positionObserving.PositionNotifier;
 import gui.innerWindows.CoordinatingWindow;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,10 +11,9 @@ import objects.tiles.Tile;
 import objects.weapons.Weapon;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.*;
 
-public class Player extends Entity implements PositionNotifier {
+public class Player extends Entity implements PositionNotifier, MotionListener {
   @Setter private List<Point> path;
   private Iterator<Point> pathIterator;
   private Point nextPosition;
@@ -21,10 +21,8 @@ public class Player extends Entity implements PositionNotifier {
   @Getter @Setter private CoordinatingWindow coordinatingWindow;
   @Getter @Setter private List<PositionListener> positionListeners = new LinkedList<>();
 
-  @Setter private Thread work;
-
   public Player(Point position) {
-    super(position, 0, new Weapon(), 0, 0, 0, 0, 0);
+    super(position, 0, new Weapon(), 300, 15, 1, 2);
   }
 
   public static List<Point> createRoute(Player player, Tile[][] map) {
@@ -64,6 +62,9 @@ public class Player extends Entity implements PositionNotifier {
     if(pathIterator == null || !pathIterator.hasNext()){
       pathIterator = path.iterator();
     }
+    if(nextPosition == null){
+      nextPosition = pathIterator.next();
+    }
     setPosition(nextPosition);
     nextPosition = pathIterator.next();
   }
@@ -75,19 +76,21 @@ public class Player extends Entity implements PositionNotifier {
     return nextPosition;
   }
 
-
-  public void start() {
-    work.start();
-  }
-
-  public void stop() {
-    work.stop();
-  }
-
   @Override
   public void notifyPosition() {
     for(var l: positionListeners){
       l.update(this.getPosition(), this.getNextPosition());
     }
+  }
+
+  @Override
+  public void subscribe(PositionListener listener) {
+    positionListeners.add(listener);
+  }
+
+  @Override
+  public void move() {
+    updateNextPosition();
+    notifyPosition();
   }
 }
