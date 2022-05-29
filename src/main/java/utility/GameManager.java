@@ -4,9 +4,9 @@ import gui.MainApplicationFrame;
 import gui.innerWindows.FightLogWindow;
 import gui.innerWindows.FightWindow;
 import localizer.ObservableLocalization;
-import motionObserving.MotionListener;
-import motionObserving.MotionManagerShouldBeConfigured;
 import motionObserving.MotionNotifier;
+import motionObserving.MotionManagerShouldBeConfigured;
+import motionObserving.MotionListener;
 import objects.entities.Enemy;
 import objects.entities.Entity;
 import objects.entities.Player;
@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class GameManager implements MotionNotifier {
+public class GameManager implements MotionListener {
   private static final Object syncObj = new Object();
   private static volatile GameManager instance;
   private Tile[][] map;
@@ -26,7 +26,7 @@ public class GameManager implements MotionNotifier {
   private Player player;
   private volatile boolean shouldMove;
   private int frequency;
-  private List<MotionListener> listeners;
+  private List<MotionNotifier> listeners;
 
   private GameManager() {}
 
@@ -62,7 +62,7 @@ public class GameManager implements MotionNotifier {
   }
 
   @Override
-  public void subscribe(MotionListener listener) {
+  public void subscribe(MotionNotifier listener) {
     listeners.add(listener);
   }
 
@@ -100,32 +100,22 @@ public class GameManager implements MotionNotifier {
               }
             }
           }
+          if(!player.isAlive()){
+            // TODO: close the game
+          }
         }).start();
   }
 
   private void startFight(List<Enemy> enemies){
-    FightWindow fightWindow = new FightWindow(
-        ObservableLocalization.instance().getBundle(),
-        MainApplicationFrame.getDesktopPane().getSize()
-    );
-
-    fightWindow.setVisible(true);
-    fightWindow.setFocusable(true);
-    try {
-      fightWindow.setMaximum(true);
-    } catch (PropertyVetoException e) {
-      e.printStackTrace();
-    }
-    MainApplicationFrame.addWindow(fightWindow);
-
-
     FightLogWindow fightLogger = new FightLogWindow(ObservableLocalization.instance().getBundle());
+    fightLogger.setIsClosingNotification(false);
     AtomicReference<FightLogWindow> fightLoggerAR =
         new AtomicReference<>(fightLogger);
 
     MainApplicationFrame.addWindow(fightLogger);
     fightLogger.setVisible(true);
     fightLogger.setFocusable(true);
+    fightLogger.setLayer(3);
 
     AtomicReference<Entity> playerAR = new AtomicReference<>(player);
     FightTicker playerTicker = new FightTicker(playerAR, fightLoggerAR);
@@ -143,6 +133,22 @@ public class GameManager implements MotionNotifier {
     fights.add(playerTicker.startFight());
     fights.addAll(enemyTickers.map(FightTicker::startFight).toList());
 
+    FightWindow fightWindow = new FightWindow(
+            ObservableLocalization.instance().getBundle(),
+            MainApplicationFrame.getDesktopPane().getSize(),
+            playerAR,
+            enemiesAR
+    );
+
+    fightWindow.setVisible(true);
+    fightWindow.setFocusable(true);
+    try {
+      fightWindow.setMaximum(true);
+    } catch (PropertyVetoException e) {
+      e.printStackTrace();
+    }
+    MainApplicationFrame.addWindow(fightWindow);
+
     fights.forEach(Thread::start);
     fights.forEach(t -> {
       try {
@@ -152,18 +158,18 @@ public class GameManager implements MotionNotifier {
       }
     });
 
-    if(!player.isAlive()){
-     setMotionFlag(false);
-     return;
+    if(player.isAlive()){
+      var iter = enemies.iterator();
+      while(iter.hasNext()){
+        var entity = iter.next();
+        if(!entity.isAlive()){
+          iter.remove();
+        }
+      }
+    } else {
+      setMotionFlag(false);
     }
 
-    var iter = enemies.iterator();
-    while(iter.hasNext()){
-      var entity = iter.next();
-      if(!entity.isAlive()){
-        iter.remove();
-      }
-    }
 
     try {
       fightWindow.setClosed(true);

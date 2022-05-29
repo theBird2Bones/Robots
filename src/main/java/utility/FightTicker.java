@@ -29,6 +29,8 @@ public class FightTicker {
     this.tickingEntity = tickingEntity;
     this.fightListener = fightListener;
     this.fightTargets = new LinkedList<>();
+
+    initialFrequency -= tickingEntity.getAcquire().getINITIATIVE() * 200;
   }
 
   public void setFightTarget(AtomicReference<Entity> target) {
@@ -66,11 +68,12 @@ public class FightTicker {
               fightListener
                   .getAcquire()
                   .notifyWith(
-                      "%s caught punch from %s%nRemain: %nHealth:%s%n"
+                      "%s caught punch from %s%nDamage: %s%nRemain: %nHealth:%s%n"
                           .formatted(
                               target.getAcquire().toString(),
                               tickingEntity.getAcquire().toString(),
-                              tickingEntity.getAcquire().getHealth()));
+                              tickingEntity.getAcquire().getATTACK(),
+                              target.getAcquire().getHealth()));
             }
           }
         });

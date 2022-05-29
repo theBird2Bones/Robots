@@ -1,17 +1,35 @@
 package gui.visualizers;
 
+import lombok.Getter;
+import objects.entities.Entity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FightPanel extends JPanel {
+  private final FightPainter fightPainter;
   private final Timer timer = initTimer();
-  public FightPanel(Dimension d){
+
+  @Getter
+  private final AtomicReference<Entity> player;
+  @Getter
+  private final List<AtomicReference<Entity>> enemies;
+  public FightPanel(Dimension d,
+                    AtomicReference<Entity> player,
+                    List<AtomicReference<Entity>> enemies){
+      this.player = player;
+      this.enemies = enemies;
+
     setSize(d);
     setBackground(Color.darkGray);
+
+    fightPainter = new FightPainter(this);
 
     timer.schedule(
         new TimerTask() {
@@ -39,8 +57,7 @@ public class FightPanel extends JPanel {
   @Override
   public void paint(Graphics g) {
     super.paint(g);
-    g.setColor(Color.red);
-    g.drawOval(15,15,15,15);
+    fightPainter.paint((Graphics2D) g);
   }
 
   protected void onRedrawEvent() {

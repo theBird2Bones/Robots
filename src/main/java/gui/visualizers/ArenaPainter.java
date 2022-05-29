@@ -3,7 +3,6 @@ package gui.visualizers;
 import objects.tiles.PassableTile;
 import objects.tiles.Tile;
 import utility.PointExtends;
-import utility.consts.GlobalConst;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

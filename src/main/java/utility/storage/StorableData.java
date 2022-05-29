@@ -30,10 +30,10 @@ public class StorableData {
     }
 
     public static <T extends JInternalFrameExtended> StorableData defaultValue(T frame){
-        return new StorableData(frame.getClass(), new Point(10, 10), new Dimension(400, 300), true, false);
+        return defaultValue(frame.getClass());
     }
 
     public static StorableData defaultValue(Class<? extends JInternalFrameExtended> frame){
-        return new StorableData(frame, new Point(10, 10), new Dimension(400, 300), true, false);
+        return new StorableData(frame, new Point(10, 10), new Dimension(250, 600), true, false);
     }
 }

@@ -16,4 +16,9 @@ public class PlainEnemy extends Enemy {
       double initiative) {
     super(position, maxAp, weapon, maxHealth, attack, defence, initiative);
   }
+
+  @Override
+  public String toString() {
+    return "PlainEnemy";
+  }
 }

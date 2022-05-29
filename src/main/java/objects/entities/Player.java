@@ -1,6 +1,6 @@
 package objects.entities;
 
-import motionObserving.MotionListener;
+import motionObserving.MotionNotifier;
 import positionObserving.PositionListener;
 import positionObserving.PositionNotifier;
 import gui.innerWindows.CoordinatingWindow;
@@ -13,7 +13,7 @@ import objects.weapons.Weapon;
 import java.awt.Point;
 import java.util.*;
 
-public class Player extends Entity implements PositionNotifier, MotionListener {
+public class Player extends Entity implements PositionNotifier, MotionNotifier {
   @Setter private List<Point> path;
   private Iterator<Point> pathIterator;
   private Point nextPosition;
@@ -22,7 +22,7 @@ public class Player extends Entity implements PositionNotifier, MotionListener {
   @Getter @Setter private List<PositionListener> positionListeners = new LinkedList<>();
 
   public Player(Point position) {
-    super(position, 0, new Weapon(), 300, 15, 1, 2);
+  super(position, 0, new Weapon(), 150, 15, 1, 2);
   }
 
   public static List<Point> createRoute(Player player, Tile[][] map) {
@@ -90,7 +90,14 @@ public class Player extends Entity implements PositionNotifier, MotionListener {
 
   @Override
   public void move() {
+    setHealth(getHealth() + 2);
     updateNextPosition();
     notifyPosition();
   }
+
+  @Override
+  public String toString() {
+    return "Player";
+  }
+
 }

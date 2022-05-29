@@ -16,6 +16,7 @@ public abstract class Entity {
   @Getter @Setter private Point position;
 
   @Getter @Setter private double direction;
+  @Getter
   private double health;
   @Getter private int ap;
 
@@ -51,9 +52,6 @@ public abstract class Entity {
     health -= entity.ATTACK;
   }
 
-  public double getHealth() {
-    return health;
-  }
 
   public void setHealth(double health) {
     this.health = health < 0 ? 0 : health > MAX_HEALTH ? MAX_HEALTH : health;
