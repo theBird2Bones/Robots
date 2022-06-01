@@ -34,7 +34,6 @@ public enum LocalizationKey {
 
   WINDOWS_MENU_NAME("windowsMenuName");
 
-
   private final String value;
 
   LocalizationKey(String value) {

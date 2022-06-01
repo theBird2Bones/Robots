@@ -1,15 +1,15 @@
 package gui;
 
-import localizer.LocalizationKey;
 import localizer.ChangingLanguage;
+import localizer.LocalizationKey;
 
 import javax.swing.*;
 import java.util.ResourceBundle;
 
 public class JMenuItemBundled extends JMenuItem implements ChangingLanguage {
-  private LocalizationKey key;
+  private final LocalizationKey key;
 
-  public JMenuItemBundled (ResourceBundle bundle, LocalizationKey key){
+  public JMenuItemBundled(ResourceBundle bundle, LocalizationKey key) {
     this.key = key;
     changeLanguageWith(bundle);
   }

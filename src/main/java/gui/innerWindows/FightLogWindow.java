@@ -1,6 +1,5 @@
 package gui.innerWindows;
 
-
 import localizer.LocalizationKey;
 import log.FightListener;
 import log.Logger;
@@ -8,7 +7,7 @@ import log.Logger;
 import java.util.ResourceBundle;
 
 public class FightLogWindow extends LogWindow implements FightListener {
-  public FightLogWindow (ResourceBundle bundle) {
+  public FightLogWindow(ResourceBundle bundle) {
     super(Logger.getDefaultLogSource(), bundle);
     this.title = bundle.getString(LocalizationKey.COORDINATING_WINDOW_NAME.value());
   }

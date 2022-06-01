@@ -22,13 +22,13 @@ public class GamePanel extends JPanel {
   private final ArenaPainter arenaPainter;
   private final Timer timer = initTimer();
 
-  private MapGenerator mapCreator;
+  private final MapGenerator mapCreator;
 
-  @Getter private Tile[][] map;
+  @Getter private final Tile[][] map;
 
-  @Getter private Map<Point2D, Rectangle> pointToRectangle;
+  @Getter private final Map<Point2D, Rectangle> pointToRectangle;
 
-  @Getter private Player player;
+  @Getter private final Player player;
 
   public GamePanel(Dimension d) {
     setSize(d);

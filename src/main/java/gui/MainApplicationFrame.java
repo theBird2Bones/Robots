@@ -42,15 +42,6 @@ public class MainApplicationFrame extends JFrameExtended {
     addWindow(coordinatingWindow);
     ObservableLocalization.instance().addListener(coordinatingWindow);
 
-/*
-    var logWindow = createLogWindow(bundle);
-    InternalFramesManager.instance().registerFrame(logWindow);
-
-    addWindow(logWindow);
-    ObservableLocalization.instance().addListener(logWindow);
-
-*/
-
     var gameWindow = createGameWindow(bundle);
     InternalFramesManager.instance().registerFrame(gameWindow);
     addWindow(gameWindow);

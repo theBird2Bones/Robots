@@ -2,50 +2,55 @@ package gui.visualizers;
 
 import domainLogic.RobotController;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JPanel;
-
 public class RobotPanel extends JPanel {
-    private final Timer timer = initTimer();
-    private final RobotController robotController;
-    private final RobotVisualizer robotVisualizer;
+  private final Timer timer = initTimer();
+  private final RobotController robotController;
+  private final RobotVisualizer robotVisualizer;
 
-  private static Timer initTimer() {
-    return new Timer("events generator", true);
-  }
+  public RobotPanel(Dimension d) {
+    robotController = new RobotController(this);
+    robotVisualizer = new RobotVisualizer(robotController);
 
-    public RobotPanel(Dimension d) {
-        robotController = new RobotController(this);
-        robotVisualizer = new RobotVisualizer(robotController);
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                onRedrawEvent();
-            }
-        }, 0, 50);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                robotController.onModelUpdateEvent();
-            }
-        }, 0, 10);
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                robotController.setTargetPosition(e.getPoint());
-                repaint();
-            }
+    timer.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            onRedrawEvent();
+          }
+        },
+        0,
+        50);
+    timer.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            robotController.onModelUpdateEvent();
+          }
+        },
+        0,
+        10);
+    addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            robotController.setTargetPosition(e.getPoint());
+            repaint();
+          }
         });
 
     setDoubleBuffered(true);
     setSize(d);
+  }
+
+  private static Timer initTimer() {
+    return new Timer("events generator", true);
   }
 
   protected void onRedrawEvent() {

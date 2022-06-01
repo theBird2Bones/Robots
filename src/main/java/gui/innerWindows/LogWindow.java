@@ -1,25 +1,24 @@
 package gui.innerWindows;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.TextArea;
-import java.util.ResourceBundle;
-
-import javax.swing.JPanel;
-
 import gui.JInternalFrameExtended;
+import localizer.ChangingLanguage;
 import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
-import localizer.ChangingLanguage;
 
-public class LogWindow extends JInternalFrameExtended implements LogChangeListener, ChangingLanguage {
-    protected final LogWindowSource logSource;
-    protected final TextArea logContent;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ResourceBundle;
+
+public class LogWindow extends JInternalFrameExtended
+    implements LogChangeListener, ChangingLanguage {
+  protected final LogWindowSource logSource;
+  protected final TextArea logContent;
 
   public LogWindow(LogWindowSource logSource, ResourceBundle bundle) {
-    super(bundle, bundle.getString(LocalizationKey.LOG_WINDOW_NAME.value()), true, true, true, true);
+    super(
+        bundle, bundle.getString(LocalizationKey.LOG_WINDOW_NAME.value()), true, true, true, true);
     this.logSource = logSource;
     this.logSource.registerListener(this);
     logContent = new TextArea("");

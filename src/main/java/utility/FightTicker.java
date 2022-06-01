@@ -14,14 +14,11 @@ import java.util.concurrent.atomic.AtomicReference;
  * and asynchronously
  */
 public class FightTicker {
+  private final AtomicReference<Entity> tickingEntity;
+  private final AtomicReference<? extends FightListener> fightListener;
+  private final List<AtomicReference<Entity>> fightTargets;
   /** initialFrequncy in ms */
   private long initialFrequency = 1500;
-
-  private AtomicReference<Entity> tickingEntity;
-
-  private AtomicReference<? extends FightListener> fightListener;
-
-  private List<AtomicReference<Entity>> fightTargets;
 
   public FightTicker(
       AtomicReference<Entity> tickingEntity,

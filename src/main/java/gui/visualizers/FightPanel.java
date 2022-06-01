@@ -16,15 +16,13 @@ public class FightPanel extends JPanel {
   private final FightPainter fightPainter;
   private final Timer timer = initTimer();
 
-  @Getter
-  private final AtomicReference<Entity> player;
-  @Getter
-  private final List<AtomicReference<Entity>> enemies;
-  public FightPanel(Dimension d,
-                    AtomicReference<Entity> player,
-                    List<AtomicReference<Entity>> enemies){
-      this.player = player;
-      this.enemies = enemies;
+  @Getter private final AtomicReference<Entity> player;
+  @Getter private final List<AtomicReference<Entity>> enemies;
+
+  public FightPanel(
+      Dimension d, AtomicReference<Entity> player, List<AtomicReference<Entity>> enemies) {
+    this.player = player;
+    this.enemies = enemies;
 
     setSize(d);
     setBackground(Color.darkGray);
@@ -51,7 +49,6 @@ public class FightPanel extends JPanel {
             requestFocusInWindow();
           }
         });
-
   }
 
   @Override

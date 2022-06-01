@@ -2,81 +2,79 @@ package utility.storage;
 
 import gui.JInternalFrameExtended;
 import gui.StateLoadingFrame;
-import lombok.Getter;
 import localizer.ObservableLocalization;
+import lombok.Getter;
 
 import java.beans.PropertyVetoException;
-import java.util.*;
-
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 public class StorableController {
-    private static volatile StorableController instance = null;
-    private static final Object syncObj = new Object();
+  private static final Object syncObj = new Object();
+  private static volatile StorableController instance = null;
+  private final ConfigIO configIO = new ConfigIO();
+  private final List<JInternalFrameExtended> listeners = new LinkedList<>();
 
-    private final ConfigIO configIO = new ConfigIO();
-    private final List<JInternalFrameExtended> listeners = new LinkedList<>();
+  @Getter private volatile Boolean isLoading = null;
 
-    @Getter
-    private volatile Boolean isLoading = null;
+  private StorableController() {}
 
-    private StorableController() {
-    }
-
-    public static StorableController instance() {
+  public static StorableController instance() {
+    if (instance == null) {
+      synchronized (syncObj) {
         if (instance == null) {
-            synchronized (syncObj) {
-                if (instance == null) {
-                    instance = new StorableController();
-                }
-            }
+          instance = new StorableController();
         }
-        return instance;
+      }
     }
+    return instance;
+  }
 
-    public void openConfigIO() {
-        configIO.openFile();
+  public void openConfigIO() {
+    configIO.openFile();
+  }
+
+  public void closeConfigIO() {
+    configIO.close();
+  }
+
+  public void saveListeners() {
+    configIO.writeConfig(
+        ObservableLocalization.instance().getLocale(),
+        listeners.stream().map(StorableData::of).toList());
+  }
+
+  public Locale loadLocale() {
+    return configIO.loadLocale();
+  }
+
+  public void setUpFrame(JInternalFrameExtended frame) {
+    askAboutLoading();
+
+    StorableData data =
+        isLoading ? configIO.loadFrameState(frame.getClass()) : StorableData.defaultValue(frame);
+    try {
+      frame.setLocation(data.position);
+      frame.setSize(data.size);
+      frame.setVisible(data.isVisible);
+      frame.setMaximum(data.isMaximum);
+    } catch (PropertyVetoException e) {
+      e.printStackTrace();
     }
+  }
 
-    public void closeConfigIO() {
-        configIO.close();
-    }
+  public void addListener(JInternalFrameExtended inst) {
+    listeners.add(inst);
+  }
 
-    public void saveListeners() {
-        configIO.writeConfig(
-                ObservableLocalization.instance().getLocale(),
-                listeners.stream().map(StorableData::of).toList()
-        );
-    }
-
-    public Locale loadLocale() {
-        return configIO.loadLocale();
-    }
-
-    public void setUpFrame(JInternalFrameExtended frame) {
-        askAboutLoading();
-
-        StorableData data = isLoading ? configIO.loadFrameState(frame.getClass()) : StorableData.defaultValue(frame);
-        try {
-            frame.setLocation(data.position);
-            frame.setSize(data.size);
-            frame.setVisible(data.isVisible);
-            frame.setMaximum(data.isMaximum);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addListener(JInternalFrameExtended inst) {
-        listeners.add(inst);
-    }
-
-    public void askAboutLoading() {
+  public void askAboutLoading() {
+    if (isLoading == null) {
+      synchronized (syncObj) {
         if (isLoading == null) {
-            synchronized (syncObj) {
-                if (isLoading == null) {
-                    isLoading = configIO.isConfigExist() && StateLoadingFrame.showDialogBox() == 0;
-                }
-            }
+          isLoading = configIO.isConfigExist() && StateLoadingFrame.showDialogBox() == 0;
         }
+      }
     }
+  }
 }

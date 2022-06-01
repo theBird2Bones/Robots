@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class PassableTile extends Tile {
-  @Getter private List<Enemy> enemies = new LinkedList<>();
+  @Getter private final List<Enemy> enemies = new LinkedList<>();
 
   public PassableTile(Point position) {
     super(position);

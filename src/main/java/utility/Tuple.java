@@ -5,8 +5,9 @@ import lombok.Data;
 
 import java.util.Objects;
 
-@Data @AllArgsConstructor
-public class Tuple <A, B>{
+@Data
+@AllArgsConstructor
+public class Tuple<A, B> {
   private A first;
   private B second;
 

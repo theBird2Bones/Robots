@@ -12,9 +12,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FightWindow extends JInternalFrame implements AutoCloseable {
 
-  public FightWindow(ResourceBundle bundle, Dimension d,
-                     AtomicReference<Entity> player,
-                     List<AtomicReference<Entity>> enemies) {
+  public FightWindow(
+      ResourceBundle bundle,
+      Dimension d,
+      AtomicReference<Entity> player,
+      List<AtomicReference<Entity>> enemies) {
     ((BasicInternalFrameUI) getUI()).setNorthPane(null);
     setBorder(null);
 

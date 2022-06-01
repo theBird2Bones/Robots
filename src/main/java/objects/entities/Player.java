@@ -1,16 +1,17 @@
 package objects.entities;
 
-import motionObserving.MotionNotifier;
-import positionObserving.PositionListener;
-import positionObserving.PositionNotifier;
 import gui.innerWindows.CoordinatingWindow;
 import lombok.Getter;
 import lombok.Setter;
+import motionObserving.MotionNotifier;
 import objects.tiles.PassableTile;
 import objects.tiles.Tile;
 import objects.weapons.Weapon;
+import positionObserving.PositionListener;
+import positionObserving.PositionNotifier;
 
-import java.awt.Point;
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
 public class Player extends Entity implements PositionNotifier, MotionNotifier {
@@ -22,7 +23,7 @@ public class Player extends Entity implements PositionNotifier, MotionNotifier {
   @Getter @Setter private List<PositionListener> positionListeners = new LinkedList<>();
 
   public Player(Point position) {
-  super(position, 0, new Weapon(), 150, 15, 1, 2);
+    super(position, 0, new Weapon(), 150, 15, 1, 2);
   }
 
   public static List<Point> createRoute(Player player, Tile[][] map) {
@@ -58,19 +59,19 @@ public class Player extends Entity implements PositionNotifier, MotionNotifier {
     return res.stream().map(p -> new Point(p.y, p.x)).toList();
   }
 
-  public void updateNextPosition(){
-    if(pathIterator == null || !pathIterator.hasNext()){
+  public void updateNextPosition() {
+    if (pathIterator == null || !pathIterator.hasNext()) {
       pathIterator = path.iterator();
     }
-    if(nextPosition == null){
+    if (nextPosition == null) {
       nextPosition = pathIterator.next();
     }
     setPosition(nextPosition);
     nextPosition = pathIterator.next();
   }
 
-  public Point getNextPosition(){
-    if (nextPosition == null){
+  public Point getNextPosition() {
+    if (nextPosition == null) {
       updateNextPosition();
     }
     return nextPosition;
@@ -78,7 +79,7 @@ public class Player extends Entity implements PositionNotifier, MotionNotifier {
 
   @Override
   public void notifyPosition() {
-    for(var l: positionListeners){
+    for (var l : positionListeners) {
       l.update(this.getPosition(), this.getNextPosition());
     }
   }
@@ -99,5 +100,4 @@ public class Player extends Entity implements PositionNotifier, MotionNotifier {
   public String toString() {
     return "Player";
   }
-
 }

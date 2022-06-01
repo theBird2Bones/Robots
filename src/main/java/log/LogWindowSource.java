@@ -1,6 +1,5 @@
 package log;
 
-import java.awt.geom.Point2D;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;

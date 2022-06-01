@@ -23,7 +23,7 @@ public class MapGenerator {
 
   private static final int pathWidth = totalWidth - leftOffset - rightOffset;
   private static final int pathHeight = totalHeight - topOffset - bottomOffset;
-  private GamePanel gamePanel;
+  private final GamePanel gamePanel;
 
   public MapGenerator(GamePanel gamePanel) {
     this.gamePanel = gamePanel;
@@ -140,7 +140,7 @@ public class MapGenerator {
     return result;
   }
 
-  private static record Point(int i, int j) {
+  private record Point(int i, int j) {
     // because matrix is
     /*
     |a11 a12|

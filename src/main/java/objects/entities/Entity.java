@@ -12,15 +12,11 @@ public abstract class Entity {
   @Getter private final double ATTACK;
   @Getter private final double DEFENSE;
   @Getter private final double INITIATIVE;
-
+  @Getter private final int ap;
+  private final Weapon weapon;
   @Getter @Setter private Point position;
-
   @Getter @Setter private double direction;
-  @Getter
-  private double health;
-  @Getter private int ap;
-
-  private Weapon weapon;
+  @Getter private double health;
 
   public Entity(
       Point position,
@@ -43,15 +39,14 @@ public abstract class Entity {
     this.weapon = weapon;
   }
 
-  public boolean isAlive(){
+  public boolean isAlive() {
     return getHealth() > 0;
   }
 
-  public void getDamageFrom(Entity entity){
-    if(!isAlive()) return;
+  public void getDamageFrom(Entity entity) {
+    if (!isAlive()) return;
     health -= entity.ATTACK;
   }
-
 
   public void setHealth(double health) {
     this.health = health < 0 ? 0 : health > MAX_HEALTH ? MAX_HEALTH : health;

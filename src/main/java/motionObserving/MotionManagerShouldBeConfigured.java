@@ -1,3 +1,3 @@
 package motionObserving;
 
-public class MotionManagerShouldBeConfigured extends Exception{ }
+public class MotionManagerShouldBeConfigured extends Exception {}

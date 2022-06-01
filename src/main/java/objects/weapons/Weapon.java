@@ -1,4 +1,3 @@
 package objects.weapons;
 
-public class Weapon {
-}
+public class Weapon {}
