@@ -17,6 +17,7 @@ public class GameWindow extends JInternalFrameExtended {
                 true, true,
                 true, true);
 
+
         ((BasicInternalFrameUI)getUI()).setNorthPane(null);
         setBorder(null);
 

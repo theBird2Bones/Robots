@@ -1,7 +1,7 @@
 package gui;
 
 import localizer.LocalizationKey;
-import utility.ChangingLanguage;
+import localizer.ChangingLanguage;
 
 import javax.swing.*;
 import java.util.ResourceBundle;

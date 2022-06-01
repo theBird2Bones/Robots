@@ -1,16 +1,12 @@
 package gui.innerWindows;
 
-import PositionObserver.PositionListener;
+import positionObserving.PositionListener;
 import localizer.LocalizationKey;
-import localizer.LocalizationManager;
-import log.LogEntry;
 import log.Logger;
-import objects.entities.Player;
-import utility.ChangingLanguage;
-import utility.ObservableLocalization;
+import localizer.ChangingLanguage;
+import localizer.ObservableLocalization;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ResourceBundle;
 
 public class CoordinatingWindow extends LogWindow implements ChangingLanguage, PositionListener {

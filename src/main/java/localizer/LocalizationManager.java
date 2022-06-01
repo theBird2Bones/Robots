@@ -10,6 +10,6 @@ public class LocalizationManager {
   }
 
   public static ResourceBundle getResourceBundle(Locale locale) {
-    return ListResourceBundle.getBundle("localization.Localization", locale);
+    return ListResourceBundle.getBundle("localizer.localization.Localization", locale);
   }
 }

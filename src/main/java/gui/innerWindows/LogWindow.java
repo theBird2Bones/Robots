@@ -12,7 +12,7 @@ import localizer.LocalizationKey;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
-import utility.ChangingLanguage;
+import localizer.ChangingLanguage;
 
 public class LogWindow extends JInternalFrameExtended implements LogChangeListener, ChangingLanguage {
     protected final LogWindowSource logSource;

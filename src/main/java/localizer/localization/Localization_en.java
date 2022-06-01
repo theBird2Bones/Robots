@@ -1,4 +1,4 @@
-package localization;
+package localizer.localization;
 
 import java.util.ListResourceBundle;
 

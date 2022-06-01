@@ -1,6 +1,6 @@
 package gui;
 
-import utility.ObservableLocalization;
+import localizer.ObservableLocalization;
 
 import javax.swing.*;
 

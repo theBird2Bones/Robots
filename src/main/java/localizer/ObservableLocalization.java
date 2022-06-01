@@ -1,6 +1,5 @@
-package utility;
+package localizer;
 
-import localizer.LocalizationManager;
 import lombok.Getter;
 
 import java.util.*;

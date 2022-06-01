@@ -1,4 +1,4 @@
-package PositionObserver;
+package positionObserving;
 
 public interface PositionNotifier {
   void notifyPosition();

@@ -9,6 +9,8 @@ import java.beans.PropertyVetoException;
 import java.util.ResourceBundle;
 
 public class JInternalFrameExtended extends JInternalFrame {
+    private boolean isClosingNotifyShown = true;
+
     public JInternalFrameExtended(ResourceBundle bundle, String title,
                                   boolean resizable, boolean closable,
                                   boolean maximizable, boolean iconifiable){
@@ -18,7 +20,9 @@ public class JInternalFrameExtended extends JInternalFrame {
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
-                CloseFrame.closeInternalFrame(JInternalFrameExtended.this);
+                if(isClosingNotifyShown){
+                    CloseFrame.closeInternalFrame(JInternalFrameExtended.this);
+                }
             }
         });
 
@@ -36,5 +40,9 @@ public class JInternalFrameExtended extends JInternalFrame {
 
         StorableController.instance().addListener(this);
         StorableController.instance().setUpFrame(this);
+    }
+
+    public void setIsClosingNotification(boolean isShown){
+        isClosingNotifyShown = isShown;
     }
 }
