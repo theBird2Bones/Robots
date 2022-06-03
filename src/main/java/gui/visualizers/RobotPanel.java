@@ -1,6 +1,7 @@
 package gui.visualizers;
 
 import domainLogic.RobotController;
+import utility.PlayerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +15,8 @@ public class RobotPanel extends JPanel {
   private final RobotController robotController;
   private final RobotVisualizer robotVisualizer;
 
-  public RobotPanel(Dimension d) {
-    robotController = new RobotController(this);
+  public RobotPanel(Dimension d, PlayerManager playerManager) {
+    robotController = new RobotController(this, playerManager);
     robotVisualizer = new RobotVisualizer(robotController);
 
     timer.schedule(

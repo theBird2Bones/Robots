@@ -2,6 +2,8 @@ package gui.visualizers;
 
 import objects.tiles.PassableTile;
 import objects.tiles.Tile;
+import utility.MapGenerator;
+import utility.PlayerManager;
 import utility.PointExtends;
 
 import java.awt.*;
@@ -12,10 +14,14 @@ public class ArenaPainter {
   private final int tileHeight = Tile.SIZE;
 
   private final GamePanel gamePanel;
+  private final MapGenerator mapGenerator;
+  private PlayerManager playerManager;
   private BufferedImage backgroundImage;
 
-  public ArenaPainter(GamePanel gamePanel) {
+  public ArenaPainter(GamePanel gamePanel, MapGenerator mapGenerator, PlayerManager playerManager) {
     this.gamePanel = gamePanel;
+    this.playerManager = playerManager;
+    this.mapGenerator = mapGenerator;
     createBackground();
   }
 
@@ -48,8 +54,8 @@ public class ArenaPainter {
   }
 
   private void paintPlayer(Graphics2D g2d) {
-    var point = PointExtends.mult(gamePanel.getPlayer().getPosition(), tileWidth, tileHeight);
-    g2d.setColor(new Color(96, 47, 107));
+    var point = PointExtends.mult(playerManager.getPlayer().getPosition(), tileWidth, tileHeight);
+    g2d.setColor(playerManager.getPlayer().getColor());
     g2d.fillOval(
         (int) point.getX() + tileWidth / 4,
         (int) point.getY() + tileHeight / 4,
@@ -98,7 +104,7 @@ public class ArenaPainter {
 
   private void createBackground() {
     var arenaSize = gamePanel.getMapSize();
-    var pointToRectangle = gamePanel.getPointToRectangle();
+    var pointToRectangle = mapGenerator.generatePointToRectangle(gamePanel);
     Graphics2D g2d;
 
     synchronized (this) {

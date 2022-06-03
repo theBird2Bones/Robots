@@ -9,7 +9,6 @@ import motionObserving.MotionManagerShouldBeConfigured;
 import motionObserving.MotionNotifier;
 import objects.entities.Enemy;
 import objects.entities.Entity;
-import objects.entities.Player;
 import objects.tiles.PassableTile;
 import objects.tiles.Tile;
 
@@ -21,18 +20,18 @@ import java.util.concurrent.atomic.AtomicReference;
 public class GameManager implements MotionListener {
   private static final Object syncObj = new Object();
   private static volatile GameManager instance;
+  private PlayerManager playerManager;
   private Tile[][] map;
 
-  private Player player;
   private volatile boolean shouldMove;
   private int frequency;
   private List<MotionNotifier> listeners;
 
-  private GameManager() {}
+  private GameManager() { }
 
-  private GameManager(Tile[][] map, Player player, boolean motionFlag, int frequency) {
+  private GameManager(Tile[][] map, PlayerManager playerManager, boolean motionFlag, int frequency) {
     this.map = map;
-    this.player = player;
+    this.playerManager = playerManager;
     this.shouldMove = motionFlag;
     this.frequency = frequency;
     listeners = new LinkedList<>();
@@ -50,11 +49,11 @@ public class GameManager implements MotionListener {
   }
 
   public static GameManager configInstance(
-      Tile[][] map, Player player, boolean motionFlag, int frequency) {
+      Tile[][] map, PlayerManager playerManager, boolean motionFlag, int frequency) {
     if (instance == null) {
       synchronized (syncObj) {
         if (instance == null) {
-          instance = new GameManager(map, player, motionFlag, frequency);
+          instance = new GameManager(map, playerManager, motionFlag, frequency);
         }
       }
     }
@@ -62,9 +61,7 @@ public class GameManager implements MotionListener {
   }
 
   @Override
-  public void subscribe(MotionNotifier listener) {
-    listeners.add(listener);
-  }
+  public void subscribe(MotionNotifier listener) { }
 
   @Override
   public void setFrequency(int ms) {
@@ -85,23 +82,17 @@ public class GameManager implements MotionListener {
             try {
               Thread.sleep(frequency);
             } catch (InterruptedException e) {
-              System.out.println("failed on tick");
               throw new RuntimeException("failed on tick");
             }
 
-            for (var e : listeners) {
-              e.move();
+            playerManager.getPlayer().move();
 
-              if (map[player.getPosition().x][player.getPosition().y]
-                  instanceof PassableTile passableTilePlayerOn) {
-                if (!passableTilePlayerOn.getEnemies().isEmpty()) {
-                  startFight(passableTilePlayerOn.getEnemies());
-                }
+            if (map[playerManager.getPlayer().getPosition().x][playerManager.getPlayer().getPosition().y]
+                instanceof PassableTile passableTilePlayerOn) {
+              if (!passableTilePlayerOn.getEnemies().isEmpty()) {
+                startFight(passableTilePlayerOn.getEnemies());
               }
             }
-          }
-          if(!player.isAlive()){
-            // TODO: close the game
           }
         }).start();
   }
@@ -117,7 +108,7 @@ public class GameManager implements MotionListener {
     fightLogger.setFocusable(true);
     fightLogger.setLayer(3);
 
-    AtomicReference<Entity> playerAR = new AtomicReference<>(player);
+    AtomicReference<Entity> playerAR = new AtomicReference<>(playerManager.getPlayer());
     FightTicker playerTicker = new FightTicker(playerAR, fightLoggerAR);
 
     var enemiesAR = enemies.stream()
@@ -158,7 +149,7 @@ public class GameManager implements MotionListener {
       }
     });
 
-    if(player.isAlive()){
+    if(playerManager.getPlayer().isAlive()){
       var iter = enemies.iterator();
       while(iter.hasNext()){
         var entity = iter.next();

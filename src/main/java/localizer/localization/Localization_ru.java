@@ -10,6 +10,9 @@ public class Localization_ru extends ListResourceBundle {
     return new Object[][] {
       {CONFIG_MENU_NAME.value(), "Настройки"},
       {EXIT_BUTTON_NAME.value(), "Выход"},
+      {PLAYER_SKINS_MENU_NAME.value(), "Скины игрока"},
+      {PLAYER_RED_SKIN.value(), "Red skin"},
+      {PLAYER_PURPLE_SKIN.value(), "Purple skin"},
       {VIEW_MODE_MENU_NAME.value(), "Режим Отображения"},
       {UNIVERSAL_SCHEME_NAME.value(), "Универсальная схема"},
       {SYSTEM_SCHEME_NAME.value(), "Системная схема"},

@@ -2,6 +2,7 @@ package gui.visualizers;
 
 import lombok.Getter;
 import objects.entities.Entity;
+import objects.entities.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,7 @@ public class FightPanel extends JPanel {
     setSize(d);
     setBackground(Color.darkGray);
 
-    fightPainter = new FightPainter(this);
+    fightPainter = new FightPainter(this, (Player) player.getAcquire());
 
     timer.schedule(
         new TimerTask() {

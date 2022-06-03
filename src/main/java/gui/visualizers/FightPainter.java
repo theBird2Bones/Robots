@@ -1,6 +1,9 @@
 package gui.visualizers;
 
 import objects.entities.Entity;
+import objects.entities.Player;
+import utility.GameManager;
+import utility.PlayerManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,10 +12,12 @@ public class FightPainter {
   private final int entitySize = 20;
 
   private final FightPanel fightPanel;
+  private Player player;
   private BufferedImage backgroundImage;
 
-  public FightPainter(FightPanel fightPanel) {
+  public FightPainter(FightPanel fightPanel, Player player) {
     this.fightPanel = fightPanel;
+    this.player = player;
     createBackground();
   }
 
@@ -48,7 +53,7 @@ public class FightPainter {
     var panelSize = fightPanel.getSize();
     var position = new Point(panelSize.width / 4, panelSize.height / 2);
 
-    g2d.setColor(Color.red);
+    g2d.setColor(player.getColor());
     g2d.fillOval(position.x, position.y, entitySize, entitySize);
     paintHealBar(g2d, fightPanel.getPlayer().getAcquire(), position);
   }

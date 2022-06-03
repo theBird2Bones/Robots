@@ -2,6 +2,9 @@ package localizer;
 
 public enum LocalizationKey {
   CONFIG_MENU_NAME("configMenuName"),
+  PLAYER_SKINS_MENU_NAME("playerSkinsMenuName"),
+  PLAYER_RED_SKIN("redSkin"),
+  PLAYER_PURPLE_SKIN("purpleSkin"),
   EXIT_BUTTON_NAME("exitButtonName"),
 
   VIEW_MODE_MENU_NAME("viewModeMenuName"),

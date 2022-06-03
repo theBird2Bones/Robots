@@ -2,6 +2,7 @@ package domainLogic;
 
 import gui.visualizers.RobotPanel;
 import objects.entities.Player;
+import utility.PlayerManager;
 import utility.PointExtends;
 import utility.Utility;
 
@@ -13,12 +14,12 @@ public class RobotController {
   private static final double MAX_ANGULAR_VELOCITY = 0.001;
   private final RobotPanel robotPanel;
 
-  private final Player robot;
+  private final PlayerManager playerManager;
   private final Point2D.Double targetPosition = new Point2D.Double(150, 100);
 
-  public RobotController(RobotPanel robotPanel) {
+  public RobotController(RobotPanel robotPanel, PlayerManager playerManager) {
     this.robotPanel = robotPanel;
-    robot = new Player(new Point(100, 100));
+    this.playerManager = playerManager;
   }
 
   private static double distance(double x1, double y1, double x2, double y2) {
@@ -53,31 +54,31 @@ public class RobotController {
   }
 
   public Point2D.Double getRobotPosition() {
-    return PointExtends.toDouble(robot.getPosition());
+    return PointExtends.toDouble(playerManager.getPlayer().getPosition());
   }
 
   public double getRobotDirection() {
-    return robot.getDirection();
+    return playerManager.getPlayer().getDirection();
   }
 
   public void onModelUpdateEvent() {
     double distance =
         distance(
             targetPosition.x, targetPosition.y,
-            robot.getPosition().x, robot.getPosition().y);
+            playerManager.getPlayer().getPosition().x, playerManager.getPlayer().getPosition().y);
     if (distance < 0.5) {
       return;
     }
     double angleToTarget =
         angleTo(
-            robot.getPosition().x, robot.getPosition().y,
+            playerManager.getPlayer().getPosition().x, playerManager.getPlayer().getPosition().y,
             targetPosition.x, targetPosition.y);
     double angularVelocity = 0;
 
-    if (angleToTarget > robot.getDirection()) {
+    if (angleToTarget > playerManager.getPlayer().getDirection()) {
       angularVelocity = MAX_ANGULAR_VELOCITY;
     }
-    if (angleToTarget < robot.getDirection()) {
+    if (angleToTarget < playerManager.getPlayer().getDirection()) {
       angularVelocity = -MAX_ANGULAR_VELOCITY;
     }
 
@@ -90,28 +91,28 @@ public class RobotController {
         Utility.applyLimits(angularVelocity, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 
     double newX =
-        robot.getPosition().x
+        playerManager.getPlayer().getPosition().x
             + velocity
                 / angularVelocity
-                * (Math.sin(robot.getDirection() + angularVelocity * duration)
-                    - Math.sin(robot.getDirection()));
+                * (Math.sin(playerManager.getPlayer().getDirection() + angularVelocity * duration)
+                    - Math.sin(playerManager.getPlayer().getDirection()));
     if (!Double.isFinite(newX)) {
-      newX = robot.getPosition().x + velocity * duration * Math.cos(robot.getDirection());
+      newX = playerManager.getPlayer().getPosition().x + velocity * duration * Math.cos(playerManager.getPlayer().getDirection());
     }
 
     double newY =
-        robot.getPosition().y
+        playerManager.getPlayer().getPosition().y
             - velocity
                 / angularVelocity
-                * (Math.cos(robot.getDirection() + angularVelocity * duration)
-                    - Math.cos(robot.getDirection()));
+                * (Math.cos(playerManager.getPlayer().getDirection() + angularVelocity * duration)
+                    - Math.cos(playerManager.getPlayer().getDirection()));
     if (!Double.isFinite(newY)) {
-      newY = robot.getPosition().y + velocity * duration * Math.sin(robot.getDirection());
+      newY = playerManager.getPlayer().getPosition().y + velocity * duration * Math.sin(playerManager.getPlayer().getDirection());
     }
 
-    robot.setLocation(PointExtends.round(keepInsideWindow(newX, newY)));
-    double newDirection = asNormalizedRadians(robot.getDirection() + angularVelocity * duration);
-    robot.setDirection(newDirection);
+    playerManager.getPlayer().setLocation(PointExtends.round(keepInsideWindow(newX, newY)));
+    double newDirection = asNormalizedRadians(playerManager.getPlayer().getDirection() + angularVelocity * duration);
+    playerManager.getPlayer().setDirection(newDirection);
   }
 
   private Point2D.Double keepInsideWindow(double X, double Y) {

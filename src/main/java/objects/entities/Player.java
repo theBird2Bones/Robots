@@ -11,19 +11,39 @@ import positionObserving.PositionListener;
 import positionObserving.PositionNotifier;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
-public class Player extends Entity implements PositionNotifier, MotionNotifier {
+public abstract class Player extends Entity implements PositionNotifier, MotionNotifier {
   @Setter private List<Point> path;
   private Iterator<Point> pathIterator;
   private Point nextPosition;
 
+  @Getter
+  protected Color color;
+
   @Getter @Setter private CoordinatingWindow coordinatingWindow;
   @Getter @Setter private List<PositionListener> positionListeners = new LinkedList<>();
 
+  public Player(){
+    this(new Point(0,0));
+  }
   public Player(Point position) {
     super(position, 0, new Weapon(), 150, 15, 1, 2);
+    color = Color.BLUE;
+  }
+
+  public void syncWith(Player another){
+    another.path = path;
+    another.pathIterator = pathIterator;
+    another.nextPosition = nextPosition;
+    another.coordinatingWindow = coordinatingWindow;
+    another.positionListeners = positionListeners;
+
+    another.setPosition(getPosition());
   }
 
   public static List<Point> createRoute(Player player, Tile[][] map) {

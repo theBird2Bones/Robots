@@ -10,6 +10,9 @@ public class Localization_en extends ListResourceBundle {
     return new Object[][] {
       {CONFIG_MENU_NAME.value(), "Settings"},
       {EXIT_BUTTON_NAME.value(), "Exit"},
+      {PLAYER_SKINS_MENU_NAME.value(), "Player skins"},
+      {PLAYER_RED_SKIN.value(), "Red skin"},
+      {PLAYER_PURPLE_SKIN.value(), "Purple skin"},
       {VIEW_MODE_MENU_NAME.value(), "View Modes"},
       {UNIVERSAL_SCHEME_NAME.value(), "Universal scheme"},
       {SYSTEM_SCHEME_NAME.value(), "System scheme"},

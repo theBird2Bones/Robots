@@ -6,7 +6,12 @@ import gui.innerWindows.LogWindow;
 import localizer.ObservableLocalization;
 import log.Logger;
 import lombok.Getter;
+import objects.entities.Player;
+import objects.tiles.Tile;
+import utility.GameManager;
 import utility.InternalFramesManager;
+import utility.MapGenerator;
+import utility.PlayerManager;
 import utility.storage.StorableController;
 
 import javax.swing.*;
@@ -42,7 +47,20 @@ public class MainApplicationFrame extends JFrameExtended {
     addWindow(coordinatingWindow);
     ObservableLocalization.instance().addListener(coordinatingWindow);
 
-    var gameWindow = createGameWindow(bundle);
+    // ------------------------------------------------------------------------
+    MapGenerator mapGenerator = new MapGenerator();
+    Tile[][] map = mapGenerator.getMap();
+
+    PlayerManager playerManager = new PlayerManager();
+    playerManager.getPlayer().setPosition(mapGenerator.findAvailablePoint());
+    playerManager.getPlayer().subscribe(coordinatingWindow);
+    playerManager.getPlayer().setPath(Player.createRoute(playerManager.getPlayer(), map));
+
+    GameManager configuredGameManager = GameManager.configInstance(map, playerManager, true, 700);
+    configuredGameManager.subscribe(playerManager.getPlayer());
+    // ------------------------------------------------------------------------
+
+    var gameWindow = createGameWindow(bundle, mapGenerator, playerManager, configuredGameManager);
     InternalFramesManager.instance().registerFrame(gameWindow);
     addWindow(gameWindow);
 
@@ -53,7 +71,7 @@ public class MainApplicationFrame extends JFrameExtended {
     }
     gameWindow.setFocusable(true);
 
-    setJMenuBar(generateMenuBar(bundle));
+    setJMenuBar(generateMenuBar(bundle, playerManager));
 
     StorableController.instance().closeConfigIO();
 
@@ -78,17 +96,32 @@ public class MainApplicationFrame extends JFrameExtended {
     return window;
   }
 
-  protected GameWindow createGameWindow(ResourceBundle bundle) {
-    return new GameWindow(bundle, getSize());
+  protected GameWindow createGameWindow(
+      ResourceBundle bundle, MapGenerator mapGenerator, PlayerManager playerManager, GameManager gameManager) {
+    return new GameWindow(bundle, getSize(), mapGenerator, playerManager, gameManager);
   }
 
-  private JMenuBar generateMenuBar(ResourceBundle bundle) {
+  private JMenuBar generateMenuBar(ResourceBundle bundle, PlayerManager playerManager) {
     JMenuBar menuBar = new JMenuBar();
 
     menuBar.add(createConfigMenu(bundle));
     menuBar.add(createLogMenu(bundle));
+    menuBar.add(createPlayerSkinsMenu(bundle, playerManager));
 
     return menuBar;
+  }
+
+  private JMenuItem createPlayerSkinsMenu(ResourceBundle bundle, PlayerManager playerManager){
+    var skinMenu = new JMenuBundled(bundle, PLAYER_SKINS_MENU_NAME);
+    var redPlayerButton = new JMenuItemBundled(bundle, PLAYER_RED_SKIN);
+    redPlayerButton.addActionListener(l -> playerManager.changePlayerWith(PlayerManager.getRedPlayerJar()));
+    var purplePlayerButton = new JMenuItemBundled(bundle, PLAYER_PURPLE_SKIN);
+    purplePlayerButton.addActionListener(l -> playerManager.changePlayerWith(PlayerManager.getPurplePlayerJar()));
+
+    skinMenu.add(redPlayerButton);
+    skinMenu.add(purplePlayerButton);
+    ObservableLocalization.instance().addListeners(skinMenu, redPlayerButton, purplePlayerButton);
+    return skinMenu;
   }
 
   private JMenuItem createConfigMenu(ResourceBundle bundle) {

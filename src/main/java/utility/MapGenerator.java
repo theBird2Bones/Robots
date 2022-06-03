@@ -1,6 +1,7 @@
 package utility;
 
 import gui.visualizers.GamePanel;
+import lombok.Getter;
 import objects.entities.PlainEnemy;
 import objects.tiles.DirtTile;
 import objects.tiles.PassableTile;
@@ -23,13 +24,15 @@ public class MapGenerator {
 
   private static final int pathWidth = totalWidth - leftOffset - rightOffset;
   private static final int pathHeight = totalHeight - topOffset - bottomOffset;
-  private final GamePanel gamePanel;
 
-  public MapGenerator(GamePanel gamePanel) {
-    this.gamePanel = gamePanel;
+  @Getter
+  private final Tile[][] map;
+
+  public MapGenerator() {
+    map = generate();
   }
 
-  public static Tile[][] generate() {
+  private static Tile[][] generate() {
     var map = new Tile[totalHeight][totalWidth];
     for (int i = 0; i < totalHeight; i++) {
       for (int j = 0; j < totalWidth; ++j) {
@@ -127,7 +130,7 @@ public class MapGenerator {
     return r.nextInt(1, maxLength + 1);
   }
 
-  public Map<Point2D, Rectangle> generatePointToRectangle() {
+  public Map<Point2D, Rectangle> generatePointToRectangle(GamePanel gamePanel) {
     var result = new HashMap<Point2D, Rectangle>();
     var map = gamePanel.getMap();
 
@@ -140,11 +143,16 @@ public class MapGenerator {
     return result;
   }
 
-  private record Point(int i, int j) {
-    // because matrix is
-    /*
-    |a11 a12|
-    |a21 a22|
-     */
+  public java.awt.Point findAvailablePoint() {
+    for (int x = 0; x < map.length; x++) {
+      for (int y = 0; y < map[0].length; y++) {
+        if (map[x][y] instanceof PassableTile) {
+          return new java.awt.Point(y, x);
+        }
+      }
+    }
+    return new java.awt.Point(0, 0);
   }
+
+  private record Point(int i, int j) { }
 }
